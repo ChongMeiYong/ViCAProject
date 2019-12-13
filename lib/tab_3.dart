@@ -106,7 +106,14 @@ class _TabScreen3State extends State<TabScreen3> {
                                       fontSize: 14),
                                 ),
                               ),
-                              
+                              Container(
+                                child: Text(
+                                  widget.user.phone,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                              ),
                             ],
                           ),
                         ]),

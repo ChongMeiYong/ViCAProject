@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'loginpage.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'resetpassword.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
@@ -149,13 +148,10 @@ void _onVerify() {
       Toast.show(res.body, context,
           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           pr.dismiss();
-          if (res.body == "The temporary password had been sent, please check your email.") { 
-            print('hjh');
+          if (res.body == "Please check your mailbox") { 
+            //print('hjh');
             Navigator.push(
-              context, MaterialPageRoute(
-                builder: (BuildContext context) => ResetPassword(email: _email)
-              )
-            ); 
+              context, MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
           }else {
           pr.dismiss();
           }

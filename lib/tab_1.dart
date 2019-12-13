@@ -101,6 +101,7 @@ class _TabScreenState extends State<TabScreen> {
                           onTap: () => _onCourseDetail(
                             data[index]['id'],
                             data[index]['coursename'],
+                            data[index]['owner'],
                             data[index]['desc'],
                             data[index]['duration'],
                             data[index]['image'],
@@ -138,7 +139,7 @@ class _TabScreenState extends State<TabScreen> {
                                         SizedBox(
                                           height: 5,
                                         ),
-                                        Text("Duration: " + data[index]['duration']),
+                                        Text("Duration " + data[index]['duration']),
                                         SizedBox(
                                           height: 5,
                                         ),
@@ -194,6 +195,7 @@ class _TabScreenState extends State<TabScreen> {
   void _onCourseDetail(
       String id,
       String coursename,
+      String owner,
       String desc,
       String duration,
       String image,
@@ -202,6 +204,7 @@ class _TabScreenState extends State<TabScreen> {
     Course course = new Course(
         id: id,
         coursename: coursename,
+        owner: owner,
         desc: desc,
         duration: duration,
         image: image);

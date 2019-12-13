@@ -14,7 +14,7 @@ $temppass= sha1($pass);
 
 $sql = "UPDATE USER SET password='$temppass' WHERE email= '$email' ";
     
-$sqls = "SELECT * FROM User WHERE email = '$email' AND verify = '1'";
+$sqls = "SELECT * FROM USER WHERE email = '$email' AND verify = '1'";
 $result = $conn->query($sqls);
     
 if($result->num_rows>0 && $conn->query($sql)===TRUE){
@@ -29,7 +29,7 @@ function sendEmail($useremail,$pass) {
     $to      = $useremail; 
     $subject = 'Verification for Reset Password'; 
     $message = 'Your new password is: '.$pass. "\nPlease use the temporary password to change your own password."; 
-    $headers = 'From: noreply@oleproject.com.my' . "\r\n" . 
+    $headers = 'From: noreply@vica.com.my' . "\r\n" . 
     'Reply-To: '.$useremail . "\r\n" . 
     'X-Mailer: PHP/' . phpversion(); 
     mail($to, $subject, $message, $headers); 
