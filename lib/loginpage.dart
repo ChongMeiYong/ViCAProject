@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vica2/admin.dart';
 import 'forgotpassword.dart';
+import 'mainscreenAdmin.dart';
 import 'register.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,9 +13,10 @@ import 'mainscreen.dart';
 import 'user.dart';
 
 String urlLogin = "http://myondb.com/vicaProject/php/login.php";
+String urlLoginAdmin = "http://myondb.com/vicaProject/php/loginAdmin.php";
 
 void main() => runApp(MyApp());
- 
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   String _pass = "";
 
   @override
-  void initState(){
+  void initState() {
     loadpref();
     print('Init: $_email');
     super.initState();
@@ -46,108 +49,112 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-  return WillPopScope(
-    onWillPop: _onBackPressAppBar,
-    child: Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: new Container(
-        padding: EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'assets/images/logo.png',
-              scale: 4.5,
-            ),
-
-            TextFormField(
-              autovalidate: _validate,
-              controller: _emcontroller,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'Email', icon: Icon(Icons.email)
-              )
-            ),
-
-            TextFormField(
-              autovalidate: _validate,
-              controller: _pscontroller,
-              decoration: InputDecoration(
-                labelText: 'Password', icon: Icon(Icons.lock)
+    return WillPopScope(
+      onWillPop: _onBackPressAppBar,
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        body: new Container(
+          padding: EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'assets/images/logo.png',
+                scale: 4.5,
               ),
-              obscureText: true,
-            ),
-            SizedBox(
-              height: 8,
-            ),
-
-            Row(
-              children: <Widget>[
-                Checkbox(
-                  value: _isChecked,
-                  onChanged: (bool value) {
-                    _onChange(value);
-                  },
+              TextFormField(
+                  autovalidate: _validate,
+                  controller: _emcontroller,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                      labelText: 'Email', icon: Icon(Icons.email))),
+              TextFormField(
+                autovalidate: _validate,
+                controller: _pscontroller,
+                decoration: InputDecoration(
+                    labelText: 'Password', icon: Icon(Icons.lock)),
+                obscureText: true,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: <Widget>[
+                  Checkbox(
+                    value: _isChecked,
+                    onChanged: (bool value) {
+                      _onChange(value);
+                    },
+                  ),
+                  Text('Remember Me', style: TextStyle(fontSize: 15))
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(children: <Widget>[
+                SizedBox(
+                  width: 25,
                 ),
-                Text('Remember Me', style: TextStyle(fontSize: 15))
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            MaterialButton(
-              shape:  RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)), 
-                  minWidth: 250,
+                MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  minWidth: 120,
                   height: 50,
-                  child: Text('Sign In', style: TextStyle(fontSize: 17)),
+                  child: Text('User', style: TextStyle(fontSize: 17)),
                   color: Colors.blueAccent,
-                  textColor:  Colors.white,
-                  elevation:  15,
+                  textColor: Colors.white,
+                  elevation: 15,
                   onPressed: _onLogin,
-              ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  minWidth: 120,
+                  height: 50,
+                  child: Text('Admin', style: TextStyle(fontSize: 17)),
+                  color: Colors.blueAccent,
+                  textColor: Colors.white,
+                  elevation: 15,
+                  onPressed: _onLoginAdmin,
+                ),
+              ]),
               SizedBox(
                 height: 20,
               ),
-              
               RichText(
-                text: new TextSpan(
-                  text: 'Forgot your password? ',
-                  style: TextStyle(color: Colors.black),
-                  children: <TextSpan>[
+                  text: new TextSpan(
+                      text: 'Forgot your password? ',
+                      style: TextStyle(color: Colors.black),
+                      children: <TextSpan>[
                     TextSpan(
-                      text: 'Click Here!',
-                      style: TextStyle(color: Colors.lightBlueAccent),
-                      recognizer: TapGestureRecognizer()..onTap = _onForgot
-                    )
-                  ]
-                )
-              ),
+                        text: 'Click Here!',
+                        style: TextStyle(color: Colors.lightBlueAccent),
+                        recognizer: TapGestureRecognizer()..onTap = _onForgot)
+                  ])),
               SizedBox(
                 height: 20,
               ),
-
               RichText(
-                text: new TextSpan(
-                  text: 'Dont have an account? ',
-                  style: TextStyle(color: Colors.black),
-                  children: <TextSpan>[
+                  text: new TextSpan(
+                      text: 'Dont have an account? ',
+                      style: TextStyle(color: Colors.black),
+                      children: <TextSpan>[
                     TextSpan(
-                      text: 'Create New Account',
-                      style: TextStyle(color: Colors.lightBlueAccent),
-                      recognizer: TapGestureRecognizer()..onTap = _onRegister
-                    )
-                  ]
-                )
-              ),
+                        text: 'Create New Account',
+                        style: TextStyle(color: Colors.lightBlueAccent),
+                        recognizer: TapGestureRecognizer()..onTap = _onRegister)
+                  ])),
               SizedBox(
                 height: 20,
-              ),  
-           ],
+              ),
+            ],
+          ),
         ),
-       ),
-    ),
+      ),
     );
   }
 
@@ -167,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
   String validatePassword(String value) {
     if (value.length == 0) {
       return "Password is Required";
-    } else if (value.length <6) {
+    } else if (value.length < 6) {
       return "Password must at least 6 characters";
     } else {
       return null;
@@ -194,19 +201,61 @@ class _LoginPageState extends State<LoginPage> {
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         if (dres[0] == "success") {
           pr.dismiss();
-          print("Radius:");
+          //print("Radius:");
           print(dres);
-          User user = new User(name:dres[1],email: dres[2],phone:dres[3]);
+          User user = new User(name: dres[1], email: dres[2], phone: dres[3]);
           Navigator.push(
-              context, MaterialPageRoute(builder: (BuildContext context) => MainScreen(user: user)));
-        }else{
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => MainScreen(user: user)));
+        } else {
           pr.dismiss();
-        }   
+        }
       }).catchError((err) {
         pr.dismiss();
         print(err);
       });
     } else {}
+  }
+
+  void _onLoginAdmin() {
+    _email = _emcontroller.text;
+    _pass = _pscontroller.text;
+
+    if (_isEmailValid(_email) && (_pass.length > 5)) {
+      ProgressDialog pr = new ProgressDialog(context,
+          type: ProgressDialogType.Normal, isDismissible: false);
+      pr.style(message: "Login In");
+      pr.show();
+      http.post(urlLoginAdmin, body: {
+        "email": _email,
+        "password": _pass,
+      }).then((res) {
+        print(res.statusCode);
+        var string = res.body;
+        List dres = string.split(",");
+        print(dres);
+        Toast.show(dres[0], context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        if (dres[0] == "Login Successful") {
+          pr.dismiss();
+          // print("Radius:");
+          print(dres);
+          Admin admin = new Admin(name: dres[1], email: dres[2], phone: dres[3]);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MainScreenAdmin(admin: admin)));
+        } else {
+          pr.dismiss();
+        }
+      }).catchError((error) {
+        pr.dismiss();
+        print(error);
+      });
+    } else {
+      setState(() {
+        _validate = true;
+      });
+    }
   }
 
   void _onChange(bool value) {
@@ -219,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
   void _onRegister() {
     print('onRegister');
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Register()));
+        context, MaterialPageRoute(builder: (context) => RegistrationScreen()));
   }
 
   void _onForgot() {

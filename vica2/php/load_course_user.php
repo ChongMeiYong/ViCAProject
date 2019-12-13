@@ -7,7 +7,7 @@ $sql = "SELECT * FROM COURSE WHERE OWNER IS NULL ORDER BY ID";
 
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
-    $response["course"] = array();
+    $response["COURSE"] = array();
     while ($row = $result ->fetch_assoc()){
         $courselist = array();
         $courselist[id] = $row["ID"];
@@ -16,7 +16,7 @@ if ($result->num_rows > 0) {
         $courselist[desc] = $row["DESC"];
         $courselist[duration] = $row["DURATION"];
         $courselist[image] = $row["IMAGE"];
-        array_push($response["course"], $courselist);    
+        array_push($response["COURSE"], $courselist);    
     }
     echo json_encode($response);
 }else{

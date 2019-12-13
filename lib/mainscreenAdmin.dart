@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'user.dart';
-import 'tab_1.dart';
-import 'tab_2.dart';
-import 'tab_3.dart';
+import 'admin.dart';
+//import 'tab_1.dart';
+//import 'tab_2.dart';
+//import 'tab_3.dart';
 
-class MainScreen extends StatefulWidget {
-  final User user;
+class MainScreenAdmin extends StatefulWidget {
+  final Admin admin;
 
-  const MainScreen({Key key, this.user}) : super(key: key);
+  const MainScreenAdmin({Key key, this.admin}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreenAdmin> {
   List<Widget> tabs;
 
   int currentTabIndex = 0;
@@ -22,11 +22,13 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    /*
     tabs = [
       TabScreen(user: widget.user),
       TabScreen2(user: widget.user),
       TabScreen3(user: widget.user),
     ];
+    */
   }
 
   String $pagetitle = "ViCA";

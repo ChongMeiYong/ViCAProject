@@ -38,6 +38,7 @@ dev_dependencies:
   intl:
   random_string: ^1.1.0
   flutter_dialogflow: ^0.1.2
+  datetime_picker_formfield: ^0.4.3
 
 
 # For information on the generic Dart part of this file, see the

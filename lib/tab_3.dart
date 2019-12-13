@@ -143,14 +143,6 @@ class _TabScreen3State extends State<TabScreen3> {
                           child: Text("CHANGE PHONE"),
                         ),
                         MaterialButton(
-                          onPressed: _registerAccount,
-                          child: Text("REGISTER"),
-                        ),
-                        MaterialButton(
-                          onPressed: _gotologinPage,
-                          child: Text("LOG IN"),
-                        ),
-                        MaterialButton(
                           onPressed: _logout,
                           child: Text("LOG OUT"),
                         )
@@ -164,11 +156,6 @@ class _TabScreen3State extends State<TabScreen3> {
   }
 
   void _takePicture() async {
-    if (widget.user.name == "not register") {
-      Toast.show("Not allowed", context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-      return;
-    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -431,7 +418,7 @@ class _TabScreen3State extends State<TabScreen3> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => Register()));
+                        builder: (BuildContext context) => RegistrationScreen()));
               },
             ),
             new FlatButton(
