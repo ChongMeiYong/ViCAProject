@@ -12,6 +12,6 @@ class Course {
       this.owner,
       this.descp,
       this.duration,
-      this.image, 
+      this.image
       });
 }

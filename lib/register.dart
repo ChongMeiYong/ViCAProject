@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'loginpage.dart';
@@ -9,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 String pathAsset = 'assets/images/profile.png';
 String urlUpload = 'http://myondb.com/vicaProject/php/register.php';
@@ -17,8 +17,10 @@ final TextEditingController _namecontroller = TextEditingController();
 final TextEditingController _emcontroller = TextEditingController();
 final TextEditingController _passcontroller = TextEditingController();
 final TextEditingController _phcontroller = TextEditingController();
+final TextEditingController _dobcontroller = TextEditingController();
+final TextEditingController _addcontroller = TextEditingController();
 
-String _name, _email, _password, _phone;
+String _name, _email, _password, _phone, _dob, _address;
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -35,29 +37,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: _onBackPressAppBar,
-        child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: AppBar(
-            backgroundColor: Colors.blue[300],
-            title: Text(
-              "Sign Up Now",
-              //style: TextStyle(color: Colors.white),
-            ),
+      onWillPop: _onBackPressAppBar,
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          backgroundColor: Colors.blueAccent,
+          title: Text(
+            "Registration",
+            //style: TextStyle(color: Colors.white),
           ),
-          body: SingleChildScrollView(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onPanDown: (_) {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Container(
-                padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-                child: RegisterWidget(),
-              ),
-            ),
+        ),
+        body: SingleChildScrollView(
+             child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onPanDown: (_) {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+          child: Container(
+            padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+            child: RegisterWidget(),
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
   Future<bool> _onBackPressAppBar() async {
@@ -106,7 +108,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               bottom: 0.0,
               child: new FloatingActionButton(
                 child: const Icon(Icons.camera_alt),
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.white,
                 onPressed: _choose,
               ),
             )
@@ -116,50 +118,57 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           height: 20,
         ),
         TextFormField(
-            autovalidate: _autoValidate,
             controller: _emcontroller,
+            autovalidate: _autoValidate,
             validator: _validateEmail,
             keyboardType: TextInputType.emailAddress,
-            decoration:
-                InputDecoration(labelText: 'Email', icon: Icon(Icons.email)
-        )),
+            decoration: InputDecoration(
+              labelText: 'Email',
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent)),
+            )),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
         TextFormField(
-            autovalidate: _autoValidate,
             controller: _namecontroller,
+            autovalidate: _autoValidate,
             validator: _validateName,
             keyboardType: TextInputType.text,
-            decoration:
-                InputDecoration(labelText: 'Name', icon: Icon(Icons.person)
-        )),
+            decoration: InputDecoration(
+              labelText: 'Name',
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent)),
+            )),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
         TextFormField(
-            autovalidate: _autoValidate,
-            controller: _passcontroller,
-            validator: _validatePassword,
-            keyboardType: TextInputType.text,
-            decoration:
-                InputDecoration(labelText: 'Password', icon: Icon(Icons.lock)
-                ),
-        obscureText: true,
+          controller: _passcontroller,
+          autovalidate: _autoValidate,
+          validator: _validatePassword,
+          decoration: InputDecoration(
+            labelText: 'Password',
+            border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent)),
+          ),
+          obscureText: true,
         ),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
         TextFormField(
-            autovalidate: _autoValidate,
             controller: _phcontroller,
+            autovalidate: _autoValidate,
             validator: _validatePhone,
             keyboardType: TextInputType.phone,
-            decoration:
-                InputDecoration(labelText: 'Phone', icon: Icon(Icons.phone)
-        )),
+            decoration: InputDecoration(
+              labelText: 'Phone',
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blueAccent)),
+            )),
         SizedBox(
-          height: 5,
+          height: 10,
         ),
         Padding(
           padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -174,22 +183,32 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             onPressed: _onRegister,
-            color: Colors.blueAccent,
+            color: Colors.blue[700],
           ),
         ),
         SizedBox(
           height: 13,
         ),
-        RichText(
-            text: new TextSpan(
-                text: 'Already Register? ',
-                style: TextStyle(color: Colors.black),
-                children: <TextSpan>[
-              TextSpan(
-                  text: 'Sign In',
-                  style: TextStyle(color: Colors.lightBlueAccent),
-                  recognizer: TapGestureRecognizer()..onTap = _goBack)
-            ])),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Divider(),
+            ),
+            GestureDetector(
+              onTap: _goBack,
+              child: Text(
+                'Already Register',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              child: Divider(),
+            )
+          ],
+        )
       ],
     );
   }
@@ -279,15 +298,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       return "Please enter correct phone number";
     }
   }
-
-  String _validateAddress(String value) {
-    if (value.length == 0) {
-      return "Please enter your address";
-    } else {
-      return null;
-    }
-  }
-
+  
   /*void _onRegister(){
      print('onRegister Button from RegisterUser()');
     print(_image.toString());
@@ -338,10 +349,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           _showDialog();
         } else {
           _showSuccessRegister();
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => LoginPage()));
+          /*  Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => LoginScreen())); */
         }
       }).catchError((err) {
         print(err);

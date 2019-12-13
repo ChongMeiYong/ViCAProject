@@ -99,7 +99,7 @@ class _TabScreenState extends State<TabScreen> {
                         child: InkWell(
                           onTap: () => _onCourseDetail(
                             data[index]['id'],
-                            data[index]['name'],
+                            data[index]['cname'],
                             data[index]['owner'],
                             data[index]['desc'],
                             data[index]['duration'],
@@ -129,7 +129,7 @@ class _TabScreenState extends State<TabScreen> {
                                     child: Column(
                                       children: <Widget>[
                                         Text(
-                                            data[index]['name']
+                                            data[index]['cname']
                                                 .toString()
                                                 .toUpperCase(),
                                             style: TextStyle(
