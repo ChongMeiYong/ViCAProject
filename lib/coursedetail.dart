@@ -83,7 +83,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
         SizedBox(
           height: 10,
         ),
-        Text(widget.course.coursename.toUpperCase(),
+        Text(widget.course.name.toUpperCase(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 TableRow(children: [
                   Text("Course Description",
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(widget.course.desc),
+                  Text(widget.course.descp),
                 ]),
               ]),
               SizedBox(
@@ -114,7 +114,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                       borderRadius: BorderRadius.circular(15.0)),
                   height: 40,
                   child: Text(
-                    'ACCEPT JOB',
+                    'Course Details',
                     style: TextStyle(fontSize: 16),
                   ),
                   color: Colors.blueAccent,

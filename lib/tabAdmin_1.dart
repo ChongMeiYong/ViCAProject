@@ -10,18 +10,20 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'SlideRightRoute.dart';
 
 double perpage = 1;
+int number = 0;
 
-class TabScreen extends StatefulWidget {
+class TabScreenAdmin extends StatefulWidget {
   final User user;
 
-  TabScreen({Key key, this.user});
+  TabScreenAdmin({Key key, this.user});
 
   @override
-  _TabScreenState createState() => _TabScreenState();
+  _TabScreenAdminState createState() => _TabScreenAdminState();
 }
 
-class _TabScreenState extends State<TabScreen> {
+class _TabScreenAdminState extends State<TabScreenAdmin> {
   GlobalKey<RefreshIndicatorState> refreshKey;
+
   List data;
 
   @override
@@ -67,7 +69,7 @@ class _TabScreenState extends State<TabScreen> {
                                   Container(
                                     color: Colors.blue[300],
                                     child: Center(
-                                      child: Text("Taken Course",
+                                      child: Text("Customer List",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -97,15 +99,10 @@ class _TabScreenState extends State<TabScreen> {
                       child: Card(
                         elevation: 2,
                         child: InkWell(
-                          onTap: () => _onCourseDetail(
-                            data[index]['id'],
+                          onTap: () => _onCustomerDetail(
                             data[index]['name'],
-                            data[index]['owner'],
-                            data[index]['desc'],
-                            data[index]['duration'],
-                            data[index]['image'],
-                            widget.user.name,
-                            widget.user.email,
+                            data[index]['email'],
+                            data[index]['phone'],
                           ),
                           onLongPress: _onCourseDelete,
                           child: Padding(
@@ -121,7 +118,7 @@ class _TabScreenState extends State<TabScreen> {
                                       image: DecorationImage(
                                     fit: BoxFit.fill,
                                     image: NetworkImage(
-                                    "http://myondb.com/vicaProject/images/${data[index]['image']}.jpg"
+                                    "http://myondb.com/vicaProject/profile/${widget.user.email}.jpg?dummy=${(number)}.jpg"
                                  
                                   )))),
                                 Expanded(
@@ -138,7 +135,13 @@ class _TabScreenState extends State<TabScreen> {
                                         SizedBox(
                                           height: 5,
                                         ),
-                                        Text("Duration " + data[index]['duration']),
+                                        Text(
+                                            data[index]['name']
+                                                .toString()
+                                                .toUpperCase(),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                        )),
                                         SizedBox(
                                           height: 5,
                                         ),
@@ -157,7 +160,7 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   Future<String> makeRequest() async {
-    String urlLoadCourse = "http://myondb.com/vicaProject/php/load_course.php";
+    String urlLoadCourse = "http://myondb.com/vicaProject/php/load_user.php";
     ProgressDialog pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
     pr.style(message: "Loading Taken Course");
@@ -191,29 +194,21 @@ class _TabScreenState extends State<TabScreen> {
     return null;
   }
 
-  void _onCourseDetail(
-      String id,
-      String cname,
-      String owner,
-      String descp,
-      String duration,
-      String image,
+  void _onCustomerDetail(
+      String name,
       String email,
-      String name) {
-    Course course = new Course(
-        id: id,
-        name: cname,
-        owner: owner,
-        descp: descp,
-        duration: duration,
-        image: image);
-    print(data);
+      String phone) {
+    User user = new User(
+        name: name,
+        email: email,
+        phone: phone);
+    //print(data);
     
-    Navigator.push(context, SlideRightRoute(page: CourseDetail(course: course, user: widget.user)));
+    Navigator.push(context, SlideRightRoute(page: CourseDetail(user: widget.user)));
   }
 
   void _onCourseDelete() {
     print("Delete");
   }
 }
-
+////

@@ -9,9 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
-String pathAsset = 'assets/images/profile_icon.png';
+String pathAsset = 'assets/images/profile.png';
 String urlUpload = 'http://myondb.com/vicaProject/php/register.php';
 File _image;
 final TextEditingController _namecontroller = TextEditingController();
@@ -36,29 +35,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onBackPressAppBar,
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
-          title: Text(
-            "Registration",
-            //style: TextStyle(color: Colors.white),
+        onWillPop: _onBackPressAppBar,
+        child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          appBar: AppBar(
+            backgroundColor: Colors.blue[300],
+            title: Text(
+              "Sign Up Now",
+              //style: TextStyle(color: Colors.white),
+            ),
           ),
-        ),
-        body: SingleChildScrollView(
-             child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onPanDown: (_) {
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-          child: Container(
-            padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-            child: RegisterWidget(),
+          body: SingleChildScrollView(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanDown: (_) {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+                child: RegisterWidget(),
+              ),
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 
   Future<bool> _onBackPressAppBar() async {
@@ -107,7 +106,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               bottom: 0.0,
               child: new FloatingActionButton(
                 child: const Icon(Icons.camera_alt),
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.blue,
                 onPressed: _choose,
               ),
             )
@@ -117,57 +116,50 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           height: 20,
         ),
         TextFormField(
-            controller: _emcontroller,
             autovalidate: _autoValidate,
+            controller: _emcontroller,
             validator: _validateEmail,
             keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent)),
-            )),
+            decoration:
+                InputDecoration(labelText: 'Email', icon: Icon(Icons.email)
+        )),
         SizedBox(
-          height: 10,
+          height: 5,
         ),
         TextFormField(
-            controller: _namecontroller,
             autovalidate: _autoValidate,
+            controller: _namecontroller,
             validator: _validateName,
             keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: 'Name',
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent)),
-            )),
+            decoration:
+                InputDecoration(labelText: 'Name', icon: Icon(Icons.person)
+        )),
         SizedBox(
-          height: 10,
+          height: 5,
         ),
         TextFormField(
-          controller: _passcontroller,
-          autovalidate: _autoValidate,
-          validator: _validatePassword,
-          decoration: InputDecoration(
-            labelText: 'Password',
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent)),
-          ),
-          obscureText: true,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-            controller: _phcontroller,
             autovalidate: _autoValidate,
+            controller: _passcontroller,
+            validator: _validatePassword,
+            keyboardType: TextInputType.text,
+            decoration:
+                InputDecoration(labelText: 'Password', icon: Icon(Icons.lock)
+                ),
+        obscureText: true,
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        TextFormField(
+            autovalidate: _autoValidate,
+            controller: _phcontroller,
             validator: _validatePhone,
             keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              labelText: 'Phone',
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent)),
-            )),
+            decoration:
+                InputDecoration(labelText: 'Phone', icon: Icon(Icons.phone)
+        )),
         SizedBox(
-          height: 10,
+          height: 5,
         ),
         Padding(
           padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -182,7 +174,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             onPressed: _onRegister,
-            color: Colors.blue[700],
+            color: Colors.blueAccent,
           ),
         ),
         SizedBox(
@@ -287,7 +279,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       return "Please enter correct phone number";
     }
   }
-  
+
   String _validateAddress(String value) {
     if (value.length == 0) {
       return "Please enter your address";
@@ -347,9 +339,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         } else {
           _showSuccessRegister();
           Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => LoginPage())); 
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => LoginPage()));
         }
       }).catchError((err) {
         print(err);

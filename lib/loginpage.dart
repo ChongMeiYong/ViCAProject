@@ -221,11 +221,10 @@ class _LoginPageState extends State<LoginPage> {
   void _onLoginAdmin() {
     _email = _emcontroller.text;
     _pass = _pscontroller.text;
-
-    if (_isEmailValid(_email) && (_pass.length > 5)) {
+    if (_isEmailValid(_email) && (_pass.length > 4)) {
       ProgressDialog pr = new ProgressDialog(context,
           type: ProgressDialogType.Normal, isDismissible: false);
-      pr.style(message: "Login In");
+      pr.style(message: "Login in");
       pr.show();
       http.post(urlLoginAdmin, body: {
         "email": _email,
@@ -237,25 +236,23 @@ class _LoginPageState extends State<LoginPage> {
         print(dres);
         Toast.show(dres[0], context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        if (dres[0] == "Login Successful") {
+        if (dres[0] == "success") {
           pr.dismiss();
-          // print("Radius:");
+          print("Radius:");
           print(dres);
-          Admin admin = new Admin(name: dres[1], email: dres[2], phone: dres[3]);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => MainScreenAdmin(admin: admin)));
+         Admin admin = new Admin(name:dres[1],email: dres[2],phone:dres[3]);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MainScreenAdmin(admin: admin)));
         } else {
           pr.dismiss();
         }
-      }).catchError((error) {
+      }).catchError((err) {
         pr.dismiss();
-        print(error);
+        print(err);
       });
-    } else {
-      setState(() {
-        _validate = true;
-      });
-    }
+    } else {}
   }
 
   void _onChange(bool value) {

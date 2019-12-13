@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vica2/tabAdmin_1.dart';
+import 'package:vica2/tabAdmin_2.dart';
+import 'package:vica2/user.dart';
 import 'admin.dart';
-//import 'tab_1.dart';
-//import 'tab_2.dart';
-//import 'tab_3.dart';
+
 
 class MainScreenAdmin extends StatefulWidget {
   final Admin admin;
+  final User user;
 
-  const MainScreenAdmin({Key key, this.admin}) : super(key: key);
+  const MainScreenAdmin({Key key, this.admin, this.user}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -22,13 +24,10 @@ class _MainScreenState extends State<MainScreenAdmin> {
   @override
   void initState() {
     super.initState();
-    /*
     tabs = [
-      TabScreen(user: widget.user),
-      TabScreen2(user: widget.user),
-      TabScreen3(user: widget.user),
+      TabScreenAdmin(user: widget.user),
+      TabScreenAdmin2(admin: widget.admin),
     ];
-    */
   }
 
   String $pagetitle = "ViCA";
@@ -54,12 +53,8 @@ class _MainScreenState extends State<MainScreenAdmin> {
 
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            title: Text("Rating"),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message ),
-            title: Text("Virtual Assistance"),
+            icon: Icon(Icons.list),
+            title: Text("Customer List"),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person, ),

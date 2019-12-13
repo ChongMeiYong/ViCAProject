@@ -1,16 +1,16 @@
 class Course {
   String id,
-      coursename,
+      name,
       owner,
-      desc,
+      descp,
       duration,
       image;
 
   Course(
       {this.id,
-      this.coursename,
+      this.name,
       this.owner,
-      this.desc,
+      this.descp,
       this.duration,
       this.image, 
       });

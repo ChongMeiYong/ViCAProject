@@ -3,7 +3,7 @@ error_reporting(0);
 include_once("dbconnect.php");
 $email = $_POST['email'];
 
-$sql = "SELECT * FROM COURSE WHERE OWNER IS NULL ORDER BY ID";
+$sql = "SELECT * FROM COURSE WHERE OWNER IS NULL ORDER BY ID DESC";
 
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
@@ -11,9 +11,9 @@ if ($result->num_rows > 0) {
     while ($row = $result ->fetch_assoc()){
         $courselist = array();
         $courselist[id] = $row["ID"];
-        $courselist[coursename] = $row["NAME"];
+        $courselist[name] = $row["NAME"];
         $courselist[owner] = $row["OWNER"];
-        $courselist[desc] = $row["DESC"];
+        $courselist[descp] = $row["DESCP"];
         $courselist[duration] = $row["DURATION"];
         $courselist[image] = $row["IMAGE"];
         //if (distance($latitude,$longitude,$row["LATITUDE"],$row["LONGITUDE"])<$radius){
