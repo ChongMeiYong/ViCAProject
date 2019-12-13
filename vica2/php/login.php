@@ -12,5 +12,5 @@ if ($result->num_rows > 0) {
         echo "success,".$row["NAME"].",".$row["EMAIL"].",".$row["PHONE"];
     }
 }else{
-    echo "failed,null,null,null,null";
+    echo "failed,null,null,null,null,null";
 }

@@ -7,8 +7,8 @@ $sql = "SELECT * FROM USER WHERE EMAIL = '$email'";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result ->fetch_assoc()){
-        echo "success,".$row["NAME"].",".$row["EMAIL"].",".$row["PHONE"].",".$row["DATE"];
+        echo "success,".$row["NAME"].",".$row["EMAIL"].",".$row["PHONE"];
     }
 }else{
-    echo "failed,null,null,null,null,null,null,null";
+    echo "failed,null,null,null,nul,null,null";
 }

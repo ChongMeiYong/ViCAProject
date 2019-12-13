@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username 	= "myondbco_vicaAdmin";
-$password 	= "~Z8fZ59(aDh~";
+$password 	= "hStpQcdI-DfM";
 $dbname 	= "myondbco_vicaProject";
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {

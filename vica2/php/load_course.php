@@ -3,7 +3,7 @@ error_reporting(0);
 include_once("dbconnect.php");
 $email = $_POST['email'];
 
-$sql = "SELECT * FROM COURSE WHERE OWNER IS NULL ORDER BY ID DESC";
+$sql = "SELECT * FROM COURSE WHERE OWNER = '$email' ORDER BY ID DESC";
 
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {

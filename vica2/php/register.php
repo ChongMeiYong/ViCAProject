@@ -8,22 +8,22 @@ $phone = $_POST['phone'];
 $encoded_string = $_POST["encoded_string"];
 $decoded_string = base64_decode($encoded_string);
 
-$sqlinsert = "INSERT INTO USER(NAME,EMAIL,PASSWORD,PHONE,VERIFY) VALUES ('$name','$email','$password','$phone','1')";
+$sqlinsert = "INSERT INTO USER(NAME, EMAIL, PASSWORD, PHONE, VERIFY) VALUES ('$name','$email','$password','$phone','1')";
 if ($conn->query($sqlinsert) === TRUE) {
     $path = '../profile/'.$email.'.jpg';
     file_put_contents($path, $decoded_string);
     sendEmail($email);
-    echo "success";
+    echo "Register Successful";
 } else {
     echo "Email Registered! Please try again";
 }
 
-function sendEmail($email) {
-    $to      = $email; 
+function sendEmail($useremail) {
+    $to      = $useremail; 
     $subject = 'Verification for Login'; 
-    $message = 'http://myondb/vicaProject/php/verify.php?email='.$email; 
+    $message = 'http://myondb/vicaProject/php/verify.php?email='.$useremail; 
     $headers = 'From: noreply@vica.com.my' . "\r\n" . 
-    'Reply-To: '.$email . "\r\n" . 
+    'Reply-To: '.$useremail . "\r\n" . 
     'X-Mailer: PHP/' . phpversion(); 
     mail($to, $subject, $message, $headers); 
 }
