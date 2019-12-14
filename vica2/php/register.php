@@ -5,10 +5,12 @@ $name = $_POST['name'];
 $email = $_POST['email'];
 $password = sha1($_POST['password']);
 $phone = $_POST['phone'];
+$dob = $_POST['dob'];
+$address = $_POST['address'];
 $encoded_string = $_POST["encoded_string"];
 $decoded_string = base64_decode($encoded_string);
 
-$sqlinsert = "INSERT INTO USER(NAME, EMAIL, PASSWORD, PHONE, VERIFY) VALUES ('$name','$email','$password','$phone','1')";
+$sqlinsert = "INSERT INTO USER(NAME, EMAIL, PASSWORD, PHONE, DOB, ADDRESS, VERIFY) VALUES ('$name','$email','$password','$phone','$dob','$address','1')";
 if ($conn->query($sqlinsert) === TRUE) {
     $path = '../profile/'.$email.'.jpg';
     file_put_contents($path, $decoded_string);

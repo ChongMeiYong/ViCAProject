@@ -37,29 +37,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onBackPressAppBar,
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
-          title: Text(
-            "Registration",
-            //style: TextStyle(color: Colors.white),
+        onWillPop: _onBackPressAppBar,
+        child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          appBar: AppBar(
+            backgroundColor: Colors.blueAccent,
+            title: Text(
+              "Registration",
+              //style: TextStyle(color: Colors.white),
+            ),
           ),
-        ),
-        body: SingleChildScrollView(
-             child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onPanDown: (_) {
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-          child: Container(
-            padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-            child: RegisterWidget(),
+          body: SingleChildScrollView(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanDown: (_) {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+                child: RegisterWidget(),
+              ),
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 
   Future<bool> _onBackPressAppBar() async {
@@ -80,6 +80,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
   GlobalKey<FormState> _globalKey = new GlobalKey();
   bool _autoValidate = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -125,7 +126,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             decoration: InputDecoration(
               labelText: 'Email',
               border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent)),
+                  borderSide: BorderSide(color: Colors.blueAccent)),
             )),
         SizedBox(
           height: 10,
@@ -138,7 +139,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             decoration: InputDecoration(
               labelText: 'Name',
               border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent)),
+                  borderSide: BorderSide(color: Colors.blueAccent)),
             )),
         SizedBox(
           height: 10,
@@ -165,7 +166,39 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             decoration: InputDecoration(
               labelText: 'Phone',
               border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent)),
+            )),
+        SizedBox(
+          height: 10,
+        ),
+        DateTimeField(
+          controller: _dobcontroller,
+          format: format,
+          decoration: InputDecoration(
+            labelText: 'Date of birth',
+            border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.blueAccent)),
+          ),
+          onShowPicker: (context, currentValue) {
+            return showDatePicker(
+                context: context,
+                firstDate: DateTime(1990),
+                initialDate: currentValue ?? DateTime.now(),
+                lastDate: DateTime(2020));
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        TextFormField(
+            controller: _addcontroller,
+            autovalidate: _autoValidate,
+            validator: _validateAddress,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              labelText: 'Address',
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent)),
             )),
         SizedBox(
           height: 10,
@@ -298,7 +331,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       return "Please enter correct phone number";
     }
   }
-  
+
+  String _validateAddress(String value) {
+    if (value.length == 0) {
+      return "Please enter your address";
+    } else {
+      return null;
+    }
+  }
+
   /*void _onRegister(){
      print('onRegister Button from RegisterUser()');
     print(_image.toString());
@@ -316,6 +357,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     _email = _emcontroller.text;
     _password = _passcontroller.text;
     _phone = _phcontroller.text;
+    _dob = _dobcontroller.text;
+    _address = _addcontroller.text;
 
     if ((_isEmailValid(_email)) &&
         (_password.length > 5) &&
@@ -333,6 +376,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         "email": _email,
         "password": _password,
         "phone": _phone,
+        "dob": _dob,
+        "address": _address,
       }).then((res) {
         print(res.statusCode);
         Toast.show(res.body, context,
@@ -342,6 +387,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         _emcontroller.text = "";
         _passcontroller.text = "";
         _phcontroller.text = "";
+        _dobcontroller.text = "";
+        _addcontroller.text = "";
 
         pr.dismiss();
         if (res.body == "Email Registered! Please try again") {

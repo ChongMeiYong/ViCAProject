@@ -60,7 +60,7 @@ class _TabScreen2State extends State<TabScreen2> {
   void Response(query) async {
     _textController.clear();
     AuthGoogle authGoogle =
-        await AuthGoogle(fileJson: "assets/vica-c327ace01280.json")
+        await AuthGoogle(fileJson: "assets/ViCA-7b7be37d0799.json")
             .build();
     Dialogflow dialogflow =
         Dialogflow(authGoogle: authGoogle, language: Language.english);
@@ -68,7 +68,7 @@ class _TabScreen2State extends State<TabScreen2> {
     ChatMessage message = new ChatMessage(
       text: response.getMessage() ??
           new CardDialogflow(response.getListMessage()[0]).title,
-      name: "Bot",
+      name: "Im Computer",
       type: false,
     );
     setState(() {
@@ -91,10 +91,13 @@ class _TabScreen2State extends State<TabScreen2> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(resizeToAvoidBottomPadding: false,
+      appBar: AppBar(
         centerTitle: true,
-        title: new Text("Virtual Assistance"),
+        backgroundColor: Colors.blue[300],
+        title: Text('Virtual Assistance'),
       ),
       body: new Column(children: <Widget>[
         new Flexible(
@@ -110,7 +113,7 @@ class _TabScreen2State extends State<TabScreen2> {
           child: _buildTextComposer(),
         ),
       ]),
-    );
+    ));
   }
 }
 
@@ -125,7 +128,7 @@ class ChatMessage extends StatelessWidget {
     return <Widget>[
       new Container(
         margin: const EdgeInsets.only(right: 16.0),
-        child: new CircleAvatar(child: new Text('B')),
+        child: new CircleAvatar(child: new Text('C')),
       ),
       new Expanded(
         child: new Column(

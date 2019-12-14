@@ -77,13 +77,13 @@ class _DetailInterfaceState extends State<DetailInterface> {
           width: 280,
           height: 200,
           child: Image.network(
-              'http://myondb/vicaProject/images/${widget.course.image}.jpg',
+              'http://myondb.com/vicaProject/images/${widget.course.image}.jpg',
               fit: BoxFit.fill),
         ),
         SizedBox(
           height: 10,
         ),
-        Text(widget.course.name.toUpperCase(),
+        Text(widget.course.cname.toUpperCase(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

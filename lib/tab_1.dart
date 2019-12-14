@@ -105,7 +105,6 @@ class _TabScreenState extends State<TabScreen> {
                             data[index]['duration'],
                             data[index]['image'],
                             widget.user.name,
-                            widget.user.email,
                           ),
                           onLongPress: _onCourseDelete,
                           child: Padding(
@@ -198,16 +197,15 @@ class _TabScreenState extends State<TabScreen> {
       String descp,
       String duration,
       String image,
-      String email,
       String name) {
     Course course = new Course(
         id: id,
-        name: cname,
+        cname: cname,
         owner: owner,
         descp: descp,
         duration: duration,
         image: image);
-    print(data);
+    //print(data);
     
     Navigator.push(context, SlideRightRoute(page: CourseDetail(course: course, user: widget.user)));
   }

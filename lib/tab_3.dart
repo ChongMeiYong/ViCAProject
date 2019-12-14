@@ -10,6 +10,8 @@ import 'user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 String urlgetuser = "http://myondb.com/vicaProject/php/get_user.php";
 String urluploadImage ="http://myondb.com/vicaProject/php/upload_imageprofile.php";
@@ -114,11 +116,27 @@ class _TabScreen3State extends State<TabScreen3> {
                                       fontSize: 14),
                                 ),
                               ),
+                              Container(
+                                child: Text(
+                                  widget.user.dob,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  widget.user.address,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                              ),
                             ],
                           ),
                         ]),
                         SizedBox(
-                          height: 4,
+                          height: 8,
                         ),
                       ],
                     ),
@@ -141,6 +159,14 @@ class _TabScreen3State extends State<TabScreen3> {
                         MaterialButton(
                           onPressed: _changePhone,
                           child: Text("CHANGE PHONE"),
+                        ),
+                        MaterialButton(
+                          onPressed: _changeDOB,
+                          child: Text("CHANGE DOB"),
+                        ),
+                        MaterialButton(
+                          onPressed: _changeAddress,
+                          child: Text("CHANGE ADDRESS"),
                         ),
                         MaterialButton(
                           onPressed: _logout,
@@ -394,6 +420,135 @@ class _TabScreen3State extends State<TabScreen3> {
       },
     );
   }
+
+    void _changeDOB() {
+    TextEditingController dobController = TextEditingController();
+    final format = DateFormat("yyyy-MM-dd");
+    // flutter defined function
+    print(widget.user.name);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Change DOB for" + widget.user.name),
+          content: DateTimeField(
+          controller: dobController,
+          format: format,
+          decoration: InputDecoration(
+            labelText: 'Date of birth',
+            icon: Icon(Icons.calendar_today)
+          ),
+          onShowPicker: (context, currentValue) {
+            return showDatePicker(
+                context: context,
+                firstDate: DateTime(1990),
+                initialDate: currentValue ?? DateTime.now(),
+                lastDate: DateTime(2020));
+          },
+        ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Yes"),
+              onPressed: () {
+                if (dobController.text.length < 5) {
+                  Toast.show("Please enter correct correct date", context,
+                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      return;
+                }
+                http.post(urlupdate, body: {
+                  "email": widget.user.email,
+                  "dob": dobController.text,
+                }).then((res) {
+                  var string = res.body;
+                  List dres = string.split(",");
+                  if (dres[0] == "success") {
+                    setState(() {
+                      widget.user.dob = dres[4];
+                      Toast.show("Success ", context,
+                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      Navigator.of(context).pop();
+                      return;
+                    });
+                  }
+                  
+                }).catchError((err) {
+                  print(err);
+                });
+              },
+            ),
+            new FlatButton(
+              child: new Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+    void _changeAddress() {
+    TextEditingController addressController = TextEditingController();
+    // flutter defined function
+    print(widget.user.name);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Change Adress for" + widget.user.name),
+          content: new TextField(
+              keyboardType: TextInputType.text,
+              controller: addressController,
+              decoration: InputDecoration(
+                labelText: 'Address',
+                icon: Icon(Icons.comment),
+              )),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Yes"),
+              onPressed: () {
+                if (addressController.text.length < 5) {
+                  Toast.show("Please enter correct address", context,
+                      duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      return;
+                }
+                http.post(urlupdate, body: {
+                  "email": widget.user.email,
+                  "address": addressController.text,
+                }).then((res) {
+                  var string = res.body;
+                  List dres = string.split(",");
+                  if (dres[0] == "success") {
+                    setState(() {
+                      widget.user.phone = dres[3];
+                      Toast.show("Success ", context,
+                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                      Navigator.of(context).pop();
+                      return;
+                    });
+                  }
+                  
+                }).catchError((err) {
+                  print(err);
+                });
+              },
+            ),
+            new FlatButton(
+              child: new Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+    }
 
   void _registerAccount() {
     TextEditingController phoneController = TextEditingController();
