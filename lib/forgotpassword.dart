@@ -112,7 +112,7 @@ class _ForgotWidgetState extends State<ForgotWidget> {
           minWidth: 300,
           height: 50,
           child: Text('Verify Email'),
-          color: Color.fromRGBO(0, 0, 255, 0.9),
+          color: Colors.blueAccent,
           textColor: Colors.white,
           elevation: 15,
           onPressed: _onVerify,

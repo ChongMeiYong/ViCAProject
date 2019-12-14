@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'loginpage.dart';
@@ -109,7 +110,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               bottom: 0.0,
               child: new FloatingActionButton(
                 child: const Icon(Icons.camera_alt),
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.blue,
                 onPressed: _choose,
               ),
             )
@@ -125,8 +126,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               labelText: 'Email',
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent)),
+              icon: Icon(Icons.email),
             )),
         SizedBox(
           height: 10,
@@ -138,8 +138,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               labelText: 'Name',
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent)),
+              icon: Icon(Icons.person),
             )),
         SizedBox(
           height: 10,
@@ -150,8 +149,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           validator: _validatePassword,
           decoration: InputDecoration(
             labelText: 'Password',
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent)),
+            icon: Icon(Icons.lock),
           ),
           obscureText: true,
         ),
@@ -165,8 +163,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: 'Phone',
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent)),
+              icon: Icon(Icons.phone),
             )),
         SizedBox(
           height: 10,
@@ -176,8 +173,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           format: format,
           decoration: InputDecoration(
             labelText: 'Date of birth',
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blueAccent)),
+            icon: Icon(Icons.calendar_today),
           ),
           onShowPicker: (context, currentValue) {
             return showDatePicker(
@@ -197,8 +193,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               labelText: 'Address',
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent)),
+              icon: Icon(Icons.home),
             )),
         SizedBox(
           height: 10,
@@ -216,32 +211,25 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             onPressed: _onRegister,
-            color: Colors.blue[700],
+            color: Colors.blueAccent,
           ),
         ),
         SizedBox(
           height: 13,
         ),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Divider(),
-            ),
-            GestureDetector(
-              onTap: _goBack,
-              child: Text(
-                'Already Register',
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold),
+        RichText(
+          text: new TextSpan(
+            text: 'Already Register? ',
+            style: TextStyle(color: Colors.black),
+            children: <TextSpan>[
+              TextSpan(
+                text: 'Sign In',
+                style: TextStyle(color: Colors.lightBlueAccent),
+                recognizer: TapGestureRecognizer()..onTap = _goBack
               ),
-            ),
-            Expanded(
-              child: Divider(),
-            )
-          ],
-        )
+            ],
+          ),
+        ),
       ],
     );
   }

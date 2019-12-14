@@ -370,7 +370,7 @@ class _TabScreen3State extends State<TabScreen3> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Change phone for" + widget.user.name),
+          title: new Text("Change phone for " + widget.user.name),
           content: new TextField(
               keyboardType: TextInputType.phone,
               controller: phoneController,
@@ -426,36 +426,42 @@ class _TabScreen3State extends State<TabScreen3> {
     final format = DateFormat("yyyy-MM-dd");
     // flutter defined function
     print(widget.user.name);
+    if (widget.user.name == "not register") {
+      Toast.show("Not allowed", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Change DOB for" + widget.user.name),
+          title: new Text("Change Dob for " + widget.user.name),
           content: DateTimeField(
-          controller: dobController,
-          format: format,
-          decoration: InputDecoration(
-            labelText: 'Date of birth',
-            icon: Icon(Icons.calendar_today)
-          ),
-          onShowPicker: (context, currentValue) {
+              //keyboardType: TextInputType.phone,
+              controller: dobController,
+              format: format,
+              decoration: InputDecoration(
+                labelText: 'Date of birth',
+                icon: Icon(Icons.calendar_today),
+              ),
+              onShowPicker: (context, currentValue) {
             return showDatePicker(
                 context: context,
                 firstDate: DateTime(1990),
                 initialDate: currentValue ?? DateTime.now(),
                 lastDate: DateTime(2020));
           },
-        ),
+              ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Yes"),
               onPressed: () {
                 if (dobController.text.length < 5) {
-                  Toast.show("Please enter correct correct date", context,
+                  Toast.show("Please enter correct date", context,
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                      return;
+                  return;
                 }
                 http.post(urlupdate, body: {
                   "email": widget.user.email,
@@ -472,7 +478,6 @@ class _TabScreen3State extends State<TabScreen3> {
                       return;
                     });
                   }
-                  
                 }).catchError((err) {
                   print(err);
                 });
@@ -499,7 +504,7 @@ class _TabScreen3State extends State<TabScreen3> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Change Adress for" + widget.user.name),
+          title: new Text("Change Adress for " + widget.user.name),
           content: new TextField(
               keyboardType: TextInputType.text,
               controller: addressController,
@@ -525,7 +530,7 @@ class _TabScreen3State extends State<TabScreen3> {
                   List dres = string.split(",");
                   if (dres[0] == "success") {
                     setState(() {
-                      widget.user.phone = dres[3];
+                      widget.user.address = dres[5];
                       Toast.show("Success ", context,
                           duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                       Navigator.of(context).pop();
