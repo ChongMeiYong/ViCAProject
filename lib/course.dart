@@ -1,16 +1,38 @@
 class Course {
-  String id,
-      cname,
-      owner,
-      descp,
-      duration,
-      image;
+  String courseid,
+      coursename,
+      courseduration,
+      coursedes,
+      //postdate,
+      courseimage,
+      userenroll;
 
   Course(
-      {this.id,
-      this.cname,
-      this.owner,
-      this.descp,
-      this.duration,
-      this.image});
+      {this.courseid,
+      this.coursename,
+      this.courseduration,
+      this.coursedes,
+      //this.postdate,
+      this.courseimage,
+      this.userenroll
+      });
 }
+
+/*class Course {
+  String courseid,
+      coursename,
+      courseowner,
+      coursedescp,
+      courseduration,
+      courseimage;
+
+  Course(
+      {this.courseid,
+      this.coursename,
+      this.courseowner,
+      this.coursedescp,
+      this.courseduration,
+      this.courseimage
+      });
+}*/
+

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'admin.dart';
+import 'info_card.dart';
 import 'loginpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -60,20 +61,7 @@ class _TabScreenAdmin2State extends State<TabScreenAdmin2> {
                                 children: <Widget>[
                               SizedBox(
                                 height: 80,
-                              ),
-                              Container(
-                                color: Colors.blue[300],
-                                child: Center(
-                                  child: Text("My Profile ",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white)),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              ),                             
                               GestureDetector(
                                 onTap: _takePicture,
                                 child: Container(
@@ -88,67 +76,63 @@ class _TabScreenAdmin2State extends State<TabScreenAdmin2> {
                                                 "http://myondb.com/vicaProject/profile/${widget.admin.email}.jpg?dummy=${(number)}'")))),
                               ),
                               SizedBox(height: 5),
-                              Container(
-                                child: Text(
-                                  widget.admin.name?.toUpperCase() ??
-                                      'Not register',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
+                                Container(
+                                  child: Text(
+                                    widget.admin.name?.toUpperCase() ??
+                                        'Not register',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                child: Text(
-                                  widget.admin.email,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
+                                SizedBox(
+                                  height: 16,
+                                  width: 180,
+                                  child: Divider(
+                                    color: Colors.teal.shade700,
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                child: Text(
-                                  widget.admin.phone,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
+                                InfoCard(
+                                  text: widget.admin.email,
+                                  icon: Icons.email,
                                 ),
-                              ),
+                                InfoCard(
+                                  text: widget.admin.phone ?? 'not registered',
+                                  icon: Icons.phone,
+                                  onPressed: _changePhone,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                  width: 180,
+                                  child: Divider(
+                                    color: Colors.teal.shade700,
+                                  ),
+                                ),                            
+                                InfoCard(
+                                  text: 'CHANGE USERNAME',
+                                  icon: Icons.person,
+                                  onPressed: _changeName,
+                                ),
+                                InfoCard(
+                                  text: 'CHANGE PASSWORD',
+                                  icon: Icons.lock,
+                                  onPressed: _changePassword,
+                                ),
+                                InfoCard(
+                                  text: "LOG OUT",
+                                  icon: Icons.exit_to_app,
+                                  onPressed: _logout,
+                                )
                             ],
                           ),
                         ]),
                         SizedBox(
-                          height: 4,
+                          height: 8,
                         ),
                       ],
                     ),
                   );
-                }
-
-                if (index == 1) {
-                  return Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: Column(
-                      children: <Widget>[
-                        MaterialButton(
-                          onPressed: _changeName,
-                          child: Text("CHANGE NAME"),
-                        ),
-                        MaterialButton(
-                          onPressed: _changePassword,
-                          child: Text("CHANGE PASSWORD"),
-                        ),
-                        MaterialButton(
-                          onPressed: _changePhone,
-                          child: Text("CHANGE PHONE"),
-                        ),
-                        MaterialButton(
-                          onPressed: _logout,
-                          child: Text("LOG OUT"),
-                        )
-                      ],
-                    ),
-                  );
-                }
+                }          
               }),
             ),
         );

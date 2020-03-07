@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'loginpage.dart';
 import 'register.dart';
 import 'user.dart';
+import 'info_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +15,8 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 String urlgetuser = "http://myondb.com/vicaProject/php/get_user.php";
-String urluploadImage ="http://myondb.com/vicaProject/php/upload_imageprofile.php";
+String urluploadImage =
+    "http://myondb.com/vicaProject/php/upload_imageprofile.php";
 String urlupdate = "http://myondb.com/vicaProject/php/update_profile.php";
 File _image;
 int number = 0;
@@ -51,141 +53,124 @@ class _TabScreen3State extends State<TabScreen3> {
               itemCount: 5,
               itemBuilder: (context, index) {
                 if (index == 0) {
-                      return Container(
-                        child: Column(
-                          children: <Widget>[
-                            Stack(children: <Widget>[
-                              Image.asset(
-                                "assets/images/cover1.png",
-                                fit: BoxFit.fitWidth,
-                              ),
-                              Column(
-                                children: <Widget>[
-                              SizedBox(
-                                height: 80,
-                              ),
-                              Container(
-                                color: Colors.blue[300],
-                                child: Center(
-                                  child: Text("My Profile ",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white)),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              GestureDetector(
-                                onTap: _takePicture,
-                                child: Container(
-                                    width: 150.0,
-                                    height: 150.0,
-                                    decoration: new BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(color: Colors.white),
-                                        image: new DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: new NetworkImage(
-                                                "http://myondb.com/vicaProject/profile/${widget.user.email}.jpg?dummy=${(number)}'")))),
-                              ),
-                              SizedBox(height: 5),
-                              Container(
-                                child: Text(
-                                  widget.user.name?.toUpperCase() ??
-                                      'Not register',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                              ),
-                              Container(
-                                child: Text(
-                                  widget.user.email,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
-                                ),
-                              ),
-                              Container(
-                                child: Text(
-                                  widget.user.phone,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
-                                ),
-                              ),
-                              Container(
-                                child: Text(
-                                  widget.user.dob,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
-                                ),
-                              ),
-                              Container(
-                                child: Text(
-                                  widget.user.address,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ]),
-                        SizedBox(
-                          height: 8,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                if (index == 1) {
-                  return Padding(
-                    padding: EdgeInsets.all(2.0),
+                  return Container(
                     child: Column(
                       children: <Widget>[
-                        MaterialButton(
-                          onPressed: _changeName,
-                          child: Text("CHANGE NAME"),
+                        Stack(
+                          children: <Widget>[
+                            Image.asset(
+                              "assets/images/cover1.png",
+                              fit: BoxFit.fitWidth,
+                            ),
+                            Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 80,
+                                ),
+                                GestureDetector(
+                                  onTap: _takePicture,
+                                  child: Container(
+                                      width: 150.0,
+                                      height: 150.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border:
+                                              Border.all(color: Colors.white),
+                                          image: new DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: new NetworkImage(
+                                                  "http://myondb.com/vicaProject/profile/${widget.user.email}.jpg?dummy=${(number)}'")))),
+                                ),
+                                SizedBox(height: 5),
+                                Container(
+                                  child: Text(
+                                    widget.user.name?.toUpperCase() ??
+                                        'Not register',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                  width: 180,
+                                  child: Divider(
+                                    color: Colors.teal.shade700,
+                                  ),
+                                ),
+                                InfoCard(
+                                  text: widget.user.email,
+                                  icon: Icons.email,
+                                ),
+                                InfoCard(
+                                  text: widget.user.phone,
+                                  icon: Icons.phone,
+                                  onPressed: _changePhone,
+                                ),
+                                InfoCard(
+                                  text: widget.user.dob,
+                                  icon: Icons.calendar_today,
+                                  onPressed: _changeDob,
+                                ),
+                                InfoCard(
+                                  text: widget.user.address,
+                                  icon: Icons.home,
+                                  onPressed: _changeAddress,
+                                ),
+                                SizedBox(
+                                  height: 18,
+                                  width: 180,
+                                  child: Divider(
+                                    color: Colors.teal.shade700,
+                                  ),
+                                ),
+                                InfoCard(
+                                  text: 'CHANGE USERNAME',
+                                  icon: Icons.person,
+                                  onPressed: _changeName,
+                                ),
+                                InfoCard(
+                                  text: 'CHANGE PASSWORD',
+                                  icon: Icons.lock,
+                                  onPressed: _changePassword,
+                                ),
+                                InfoCard(
+                                  text: "REGISTER",
+                                  icon: Icons.note,
+                                  onPressed: _registerAccount,
+                                ),
+                                InfoCard(
+                                  text: "LOG IN",
+                                  icon: Icons.open_in_new,
+                                  onPressed: _gotologinPage,
+                                ),
+                                InfoCard(
+                                  text: "LOG OUT",
+                                  icon: Icons.exit_to_app,
+                                  onPressed: _logout,
+                                )
+                              ],
+                            ),
+                          ],
                         ),
-                        MaterialButton(
-                          onPressed: _changePassword,
-                          child: Text("CHANGE PASSWORD"),
-                        ),
-                        MaterialButton(
-                          onPressed: _changePhone,
-                          child: Text("CHANGE PHONE"),
-                        ),
-                        MaterialButton(
-                          onPressed: _changeDOB,
-                          child: Text("CHANGE DOB"),
-                        ),
-                        MaterialButton(
-                          onPressed: _changeAddress,
-                          child: Text("CHANGE ADDRESS"),
-                        ),
-                        MaterialButton(
-                          onPressed: _logout,
-                          child: Text("LOG OUT"),
-                        )
                       ],
                     ),
                   );
                 }
               }),
-            ),
-        );
+        ));
   }
 
   void _takePicture() async {
+    /*if (widget.user.name == "not register") {
+      Toast.show("Not allowed", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }*/
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
+        //return object of type dialog
         return AlertDialog(
           title: new Text("Take new profile picture?"),
           content: new Text("Are your sure?"),
@@ -227,30 +212,28 @@ class _TabScreen3State extends State<TabScreen3> {
     );
   }
 
-  void _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('email', '');
-    await prefs.setString('pass', '');
-    print("LOGOUT");
-    Navigator.pop(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
-  }
-
   void _changeName() {
     TextEditingController nameController = TextEditingController();
     // flutter defined function
+
+    if (widget.user.name == "not register") {
+      Toast.show("Not allowed", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Change " + widget.user.name),
+          title: new Text("Change name for " + widget.user.name),
           content: new TextField(
               controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Name',
-                icon: Icon(Icons.person),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueAccent)),
               )),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -301,6 +284,11 @@ class _TabScreen3State extends State<TabScreen3> {
     TextEditingController passController = TextEditingController();
     // flutter defined function
     print(widget.user.name);
+    if (widget.user.name == "not register") {
+      Toast.show("Not allowed", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -311,7 +299,8 @@ class _TabScreen3State extends State<TabScreen3> {
             controller: passController,
             decoration: InputDecoration(
               labelText: 'New Password',
-              icon: Icon(Icons.lock),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blueAccent)),
             ),
             obscureText: true,
           ),
@@ -338,15 +327,14 @@ class _TabScreen3State extends State<TabScreen3> {
                       if (dres[0] == "success") {
                         Toast.show("Success", context,
                             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                            savepref(passController.text);
-                            Navigator.of(context).pop();
+                        savepref(passController.text);
+                        Navigator.of(context).pop();
                       }
                     });
                   } else {}
                 }).catchError((err) {
                   print(err);
                 });
-                
               },
             ),
             new FlatButton(
@@ -365,6 +353,11 @@ class _TabScreen3State extends State<TabScreen3> {
     TextEditingController phoneController = TextEditingController();
     // flutter defined function
     print(widget.user.name);
+    if (widget.user.name == "not register") {
+      Toast.show("Not allowed", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -376,7 +369,8 @@ class _TabScreen3State extends State<TabScreen3> {
               controller: phoneController,
               decoration: InputDecoration(
                 labelText: 'phone',
-                icon: Icon(Icons.phone),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blueAccent)),
               )),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -386,7 +380,7 @@ class _TabScreen3State extends State<TabScreen3> {
                 if (phoneController.text.length < 5) {
                   Toast.show("Please enter correct phone number", context,
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                      return;
+                  return;
                 }
                 http.post(urlupdate, body: {
                   "email": widget.user.email,
@@ -403,7 +397,6 @@ class _TabScreen3State extends State<TabScreen3> {
                       return;
                     });
                   }
-                  
                 }).catchError((err) {
                   print(err);
                 });
@@ -421,7 +414,7 @@ class _TabScreen3State extends State<TabScreen3> {
     );
   }
 
-    void _changeDOB() {
+  void _changeDob() {
     TextEditingController dobController = TextEditingController();
     final format = DateFormat("yyyy-MM-dd");
     // flutter defined function
@@ -438,21 +431,19 @@ class _TabScreen3State extends State<TabScreen3> {
         return AlertDialog(
           title: new Text("Change Dob for " + widget.user.name),
           content: DateTimeField(
-              //keyboardType: TextInputType.phone,
               controller: dobController,
               format: format,
               decoration: InputDecoration(
-                labelText: 'Date of birth',
-                icon: Icon(Icons.calendar_today),
-              ),
+                  labelText: 'Date of birth',
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueAccent))),
               onShowPicker: (context, currentValue) {
-            return showDatePicker(
-                context: context,
-                firstDate: DateTime(1990),
-                initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2020));
-          },
-              ),
+                return showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime.now().add(Duration(days: 365)));
+              }),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
@@ -495,32 +486,37 @@ class _TabScreen3State extends State<TabScreen3> {
     );
   }
 
-    void _changeAddress() {
+  void _changeAddress() {
     TextEditingController addressController = TextEditingController();
     // flutter defined function
     print(widget.user.name);
+    if (widget.user.name == "not register") {
+      Toast.show("Not allowed", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      return;
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Change Adress for " + widget.user.name),
+          title: new Text("Change address for " + widget.user.name),
           content: new TextField(
               keyboardType: TextInputType.text,
               controller: addressController,
               decoration: InputDecoration(
-                labelText: 'Address',
-                icon: Icon(Icons.comment),
-              )),
+                  labelText: 'Address',
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueAccent)))),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Yes"),
               onPressed: () {
-                if (addressController.text.length < 5) {
+                if (addressController.text.length == 0) {
                   Toast.show("Please enter correct address", context,
                       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                      return;
+                  return;
                 }
                 http.post(urlupdate, body: {
                   "email": widget.user.email,
@@ -537,7 +533,6 @@ class _TabScreen3State extends State<TabScreen3> {
                       return;
                     });
                   }
-                  
                 }).catchError((err) {
                   print(err);
                 });
@@ -553,7 +548,7 @@ class _TabScreen3State extends State<TabScreen3> {
         );
       },
     );
-    }
+  }
 
   void _registerAccount() {
     TextEditingController phoneController = TextEditingController();
@@ -578,7 +573,8 @@ class _TabScreen3State extends State<TabScreen3> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => RegistrationScreen()));
+                        builder: (BuildContext context) =>
+                            RegistrationScreen()));
               },
             ),
             new FlatButton(
@@ -602,7 +598,7 @@ class _TabScreen3State extends State<TabScreen3> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Go to login page?" + widget.user.name),
+          title: new Text("Sign In? " + widget.user.name),
           content: new Text("Are your sure?"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -631,9 +627,43 @@ class _TabScreen3State extends State<TabScreen3> {
     );
   }
 
+  void _logout() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Log out?"),
+          content: new Text("Are your sure want to logout?"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Yes"),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setString('email', '');
+                await prefs.setString('pass', '');
+                print("LOGOUT");
+                Navigator.pop(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+            ),
+            new FlatButton(
+              child: new Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void savepref(String pass) async {
     print('Inside savepref');
     SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('pass', pass);
+    await prefs.setString('pass', pass);
   }
 }

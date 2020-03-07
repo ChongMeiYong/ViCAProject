@@ -8,8 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 import 'dart:async';
-import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
 
 String pathAsset = 'assets/images/profile.png';
 String urlUpload = 'http://myondb.com/vicaProject/php/register.php';
@@ -37,30 +37,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return WillPopScope(
         onWillPop: _onBackPressAppBar,
         child: Scaffold(
-          resizeToAvoidBottomPadding: false,
+          //resizeToAvoidBottomInset: false,
+          //resizeToAvoidBottomPadding: false,
           appBar: AppBar(
-            backgroundColor: Colors.blueAccent,
-            title: Text(
-              "Registration",
-              //style: TextStyle(color: Colors.white),
-            ),
+            title: Text('REGISTER', style: TextStyle(color: Colors.black),),
+            //leading: new Container(),
           ),
           body: SingleChildScrollView(
-            child: GestureDetector(
+            //reverse: true,
+            /*child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onPanDown: (_) {
                 FocusScope.of(context).requestFocus(FocusNode());
-              },
+              },*/
               child: Container(
-                padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+               // padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+                //padding: EdgeInsets.fromLTRB(40, 20, 40, bottom),
+                padding: EdgeInsets.only(left: 40, right: 40, bottom: bottom),
                 child: RegisterWidget(),
               ),
             ),
           ),
-        ));
+        );
   }
 
   Future<bool> _onBackPressAppBar() async {
@@ -85,41 +87,64 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Stack(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 50, right: 50, top: 5),
-              child: Container(
-                height: 170,
-                width: 170,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: _image == null
-                          ? AssetImage(pathAsset)
-                          : FileImage(_image),
-                      fit: BoxFit.fill),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Stack(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 50, right: 50, top: 15),
+                child: Container(
+                  height: 160,
+                  width: 160,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: _image == null
+                            ? AssetImage(pathAsset)
+                            : FileImage(_image),
+                        fit: BoxFit.cover),
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              right: 50.0,
-              bottom: 0.0,
-              child: new FloatingActionButton(
-                child: const Icon(Icons.camera_alt),
-                backgroundColor: Colors.blue,
-                onPressed: _choose,
-              ),
-            )
+              Positioned(
+                right: 50.0,
+                bottom: 0.0,
+                child: new FloatingActionButton(
+                  child: const Icon(Icons.camera_alt, color: Colors.black),
+                  backgroundColor: Colors.blue[200],
+                  onPressed: _choose,
+                ),
+              )
+            ],
+          ),
+          SizedBox(height:10),
+           Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Profile Picture are'),
+            _image == null
+                ? Text(' *Required*', style: TextStyle(color: Colors.red))
+                : Text(''),
           ],
         ),
-        SizedBox(
-          height: 20,
-        ),
-        TextFormField(
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            controller: _namecontroller,
+            autovalidate: _autoValidate,
+            validator: _validateName,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              labelText: 'Username',
+              icon: Icon(Icons.person),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
             controller: _emcontroller,
             autovalidate: _autoValidate,
             validator: _validateEmail,
@@ -127,78 +152,68 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             decoration: InputDecoration(
               labelText: 'Email',
               icon: Icon(Icons.email),
-            )),
-        SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-            controller: _namecontroller,
-            autovalidate: _autoValidate,
-            validator: _validateName,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: 'Name',
-              icon: Icon(Icons.person),
-            )),
-        SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-          controller: _passcontroller,
-          autovalidate: _autoValidate,
-          validator: _validatePassword,
-          decoration: InputDecoration(
-            labelText: 'Password',
-            icon: Icon(Icons.lock),
+            ),
           ),
-          obscureText: true,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-            controller: _phcontroller,
-            autovalidate: _autoValidate,
-            validator: _validatePhone,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              labelText: 'Phone',
-              icon: Icon(Icons.phone),
-            )),
-        SizedBox(
-          height: 10,
-        ),
-        DateTimeField(
-          controller: _dobcontroller,
-          format: format,
-          decoration: InputDecoration(
-            labelText: 'Date of birth',
-            icon: Icon(Icons.calendar_today),
+          SizedBox(
+            height: 10,
           ),
-          onShowPicker: (context, currentValue) {
-            return showDatePicker(
-                context: context,
-                firstDate: DateTime(1990),
-                initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2020));
-          },
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-            controller: _addcontroller,
+          TextFormField(
+            controller: _passcontroller,
             autovalidate: _autoValidate,
-            validator: _validateAddress,
-            keyboardType: TextInputType.text,
+            validator: _validatePassword,
             decoration: InputDecoration(
-              labelText: 'Address',
-              icon: Icon(Icons.home),
-            )),
-        SizedBox(
-          height: 10,
-        ),
-        Padding(
+              labelText: 'Password',
+              icon: Icon(Icons.vpn_key),
+            ),
+            obscureText: true,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+              controller: _addcontroller,
+              autovalidate: _autoValidate,
+              validator: _validateAddress,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Address',
+                icon: Icon(Icons.home),
+              )),
+               SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+              controller: _phcontroller,
+              autovalidate: _autoValidate,
+              validator: _validatePhone,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                labelText: 'Phone',
+                icon: Icon(Icons.phone_in_talk),
+              )),
+          SizedBox(
+            height: 10,
+          ),
+          DateTimeField(
+              controller: _dobcontroller,
+              //autovalidate: _autoValidate,
+              //validator: _validateDob,
+              format: format,
+              decoration: InputDecoration(
+                  labelText: 'Date of birth',
+                  icon: Icon(Icons.calendar_today),
+              ),
+              onShowPicker: (context, currentValue) {
+                return showDatePicker(
+                    context: context,
+                    firstDate: DateTime(1900),
+                    initialDate: currentValue ?? DateTime.now(),
+                    lastDate: DateTime.now().add(Duration(days: 365)));
+              }),
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
           padding: EdgeInsets.only(top: 10, bottom: 10),
           child: MaterialButton(
             child: Text(
@@ -230,8 +245,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             ],
           ),
         ),
-      ],
-    );
+        ]);
   }
 
   void _choose() async {
@@ -246,8 +260,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   leading: Icon(Icons.camera_alt),
                   title: Text('Camera'),
                   onTap: () async {
-                    _image =
-                        await ImagePicker.pickImage(source: ImageSource.camera);
+                    _image = await ImagePicker.pickImage(
+                        source: ImageSource.camera,
+                        imageQuality: 60,
+                        maxHeight: 250,
+                        maxWidth: 250);
                     setState(() {});
                     Navigator.pop(context);
                   },
@@ -257,7 +274,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   title: Text('Gallery'),
                   onTap: () async {
                     _image = await ImagePicker.pickImage(
-                        source: ImageSource.gallery);
+                        source: ImageSource.gallery,
+                        imageQuality: 60,
+                        maxHeight: 250,
+                        maxWidth: 250);
                     setState(() {});
                     Navigator.pop(context);
                   },
@@ -266,8 +286,14 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             ),
           );
         });
+  }
 
-    //selection==null?_image = await ImagePicker.pickImage(source: ImageSource.camera):await ImagePicker.pickImage(source: ImageSource.gallery);
+  String _validateName(String value) {
+    if (value.length == 0) {
+      return "Please enter your username";
+    } else {
+      return null;
+    }
   }
 
   String _validateEmail(String value) {
@@ -288,14 +314,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       return null;
     }
     return 'Email is not valid';
-  }
-
-  String _validateName(String value) {
-    if (value.length == 0) {
-      return "Please enter your name";
-    } else {
-      return null;
-    }
   }
 
   String _validatePassword(String value) {
@@ -327,12 +345,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       return null;
     }
   }
-
-  /*void _onRegister(){
-     print('onRegister Button from RegisterUser()');
-    print(_image.toString());
-    uploadData();
-  }*/
 
   void _goBack() {
     _image = null;
@@ -380,7 +392,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
         pr.dismiss();
         if (res.body == "Email Registered! Please try again") {
-          print('enter fail area');
           _showDialog();
         } else {
           _showSuccessRegister();
@@ -436,8 +447,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Thanks for your registration'),
-            content: const Text('You can login now!'),
+            title: Text('Thanks for Registration'),
+            content: const Text('Please verify account from your email'),
             actions: <Widget>[
               FlatButton(
                 child: Text(

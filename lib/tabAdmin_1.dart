@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:vica2/rateform.dart';
+import 'package:vica2/viewform.dart';
 import 'course.dart';
-import 'coursedetail.dart';
 import 'user.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'SlideRightRoute.dart';
@@ -67,13 +68,18 @@ class _TabScreenAdminState extends State<TabScreenAdmin> {
                                     height: 80,
                                   ),
                                   Container(
-                                    color: Colors.blue[300],
                                     child: Center(
                                       child: Text("Customer List",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.white)),
+                                              color: Colors.blueAccent)),
+                                  )),
+                                  SizedBox(
+                                    height: 16,
+                                    width: 180,
+                                    child: Divider(
+                                      color: Colors.blue,
                                   )),
                               ]),
                             ]),
@@ -81,99 +87,91 @@ class _TabScreenAdminState extends State<TabScreenAdmin> {
                       );
                     }
                     if (index == data.length && perpage > 1) {
-                      return Container(
-                        width: 250,
-                        color: Colors.white,
-                        child: MaterialButton(
-                          child: Text(
-                            "Load More",
-                            style: TextStyle(color: Colors.black),
+                        return Container(
+                          width: 250,
+                          color: Colors.white,
+                          child: MaterialButton(
+                            child: Text(
+                              "Load More",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            onPressed: () {},
                           ),
-                          onPressed: () {},
-                        ),
-                      );
-                    }
-                    index -= 1;
-                    return Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: Card(
-                        elevation: 2,
-                        child: InkWell(
-                          onTap: () => _onCustomerDetail(
-                            data[index]['name'],
-                            data[index]['email'],
-                            data[index]['phone'],
-                          ),
-                          onLongPress: _onCourseDelete,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  height: 100,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                      border: Border.all(color: Colors.white),
-                                      image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                    "http://myondb.com/vicaProject/profile/${widget.user.email}.jpg?dummy=${(number)}.jpg"
-                                 
-                                  )))),
-                                Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                            data[index]['name']
-                                                .toString()
-                                                .toUpperCase(),
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold)),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                            data[index]['name']
-                                                .toString()
-                                                .toUpperCase(),
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                        )),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                      ],
+                        );
+                      }
+                      index -= 1;
+                      return Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: Card(
+                          elevation: 2,
+                          child: InkWell(
+                            onTap: () => _onUserDetail(
+                              data[index]['name'],
+                              data[index]['email'],
+                              data[index]['phone'],
+                              data[index]['dob'],
+                              data[index]['address'],
+                              //data[index]['postdate'],
+                              //widget.user.email,
+                              //widget.user.name,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                      height: 100,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          //border: Border.all(color: Colors.blueGrey),
+                                          image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  "http://myondb.com/vicaProject/profile/${data[index]['email']}.jpg")))),
+                                  Expanded(
+                                    child: Container(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                              data[index]['name']
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold)),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(data[index]['email']),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-            )));
+                      );
+                    }),
+              ),
+            ));
   }
 
   Future<String> makeRequest() async {
-    String urlLoadCourse = "http://myondb.com/vicaProject/php/load_user.php";
+    String urlUser = "http://myondb.com/vicaProject/php/load_user.php";
     ProgressDialog pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    pr.style(message: "Loading Taken Course");
+    pr.style(message: "Loading...");
     pr.show();
-    http.post(urlLoadCourse, body: {
-      "email": widget.user.email ?? "notavail",
+    http.post(urlUser, body: {
+      "email": widget.user.email,
     }).then((res) {
       setState(() {
         var extractdata = json.decode(res.body);
-        data = extractdata["course"];
+        data = extractdata["user"];
         perpage = (data.length / 10);
         print("data");
-        print(data);
         pr.dismiss();
       });
     }).catchError((err) {
@@ -185,7 +183,6 @@ class _TabScreenAdminState extends State<TabScreenAdmin> {
 
   Future init() async {
     this.makeRequest();
-    //_getCurrentLocation();
   }
 
   Future<Null> refreshList() async {
@@ -194,21 +191,56 @@ class _TabScreenAdminState extends State<TabScreenAdmin> {
     return null;
   }
 
-  void _onCustomerDetail(
-      String name,
-      String email,
-      String phone) {
-    User user = new User(
-        name: name,
-        email: email,
-        phone: phone);
-    //print(data);
-    
-    Navigator.push(context, SlideRightRoute(page: CourseDetail(user: widget.user)));
-  }
+  void _onUserDetail(
+    String name,
+    String email,
+    String phone,
+    String dob,
+    //String postdate,
+    String address,
+    //String name
+  ) {
+    User user = new User (
+      name: name,
+      email: email,
+      phone: phone,
+      dob: dob,
+      address: address,
+      //postdate: postdate,
+    );
 
-  void _onCourseDelete() {
-    print("Delete");
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Choose to "),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              new FlatButton(
+                  child: new Text("View Rated Form"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewForm(
+                                user: widget.user)));
+                                
+                  }),
+              new FlatButton(
+                child: new Text("Rate Course"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              RateForm( user: widget.user)));
+                },
+              ),
+            ],
+          );
+        });
   }
 }
-////

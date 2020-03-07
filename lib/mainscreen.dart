@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vica2/question.dart';
 import 'user.dart';
+import 'question.dart';
 import 'tab_1.dart';
 import 'tab_2.dart';
 import 'tab_3.dart';
 
 class MainScreen extends StatefulWidget {
   final User user;
+  final Question question;
 
-  const MainScreen({Key key, this.user}) : super(key: key);
+  const MainScreen({Key key, this.user, this.question}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();

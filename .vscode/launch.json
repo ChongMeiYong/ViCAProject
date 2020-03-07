@@ -6,8 +6,8 @@
     "configurations": [
         {
             "name": "Flutter",
-            "type": "dart",
             "request": "launch",
+            "type": "dart",
             "program": "lib/splashscreen.dart"
         }
     ]
