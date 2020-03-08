@@ -232,8 +232,7 @@ class _TabScreen3State extends State<TabScreen3> {
               controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Name',
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent)),
+                icon: Icon(Icons.person),
               )),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -299,8 +298,7 @@ class _TabScreen3State extends State<TabScreen3> {
             controller: passController,
             decoration: InputDecoration(
               labelText: 'New Password',
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent)),
+              icon: Icon(Icons.vpn_key),
             ),
             obscureText: true,
           ),
@@ -369,8 +367,7 @@ class _TabScreen3State extends State<TabScreen3> {
               controller: phoneController,
               decoration: InputDecoration(
                 labelText: 'phone',
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent)),
+                icon: Icon(Icons.phone_in_talk),
               )),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -435,8 +432,7 @@ class _TabScreen3State extends State<TabScreen3> {
               format: format,
               decoration: InputDecoration(
                   labelText: 'Date of birth',
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent))),
+                  icon: Icon(Icons.calendar_today)),
               onShowPicker: (context, currentValue) {
                 return showDatePicker(
                     context: context,
@@ -506,8 +502,7 @@ class _TabScreen3State extends State<TabScreen3> {
               controller: addressController,
               decoration: InputDecoration(
                   labelText: 'Address',
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueAccent)))),
+                  icon: Icon(Icons.home))),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(

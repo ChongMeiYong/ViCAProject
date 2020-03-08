@@ -1,18 +1,11 @@
-import 'dart:async';
-import 'package:toast/toast.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
-import 'package:vica2/tab_1.dart';
 import 'user.dart';
 import 'course.dart';
 import 'mainscreen.dart';
 
 String urlUpload = 'http://myondb.com/vicaProject/php/evaluate.php';
-//final TextEditingController _s1controller = TextEditingController();
 
 String selected1, selected2, selected3, selected4, selected5, selected6, selected7;
 
@@ -285,13 +278,14 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   color: Colors.blueAccent,
                   textColor: Colors.white,
                   elevation: 5,
-                  //onPressed: validateAnswers,             
+                  //onPressed: _validateAnswers,             
                 ),
                 //MapSample(),
         ),        
       ]);
     }
   }
+  
 /*
   void validateAnswers() {
     if (selected1 == -1 && selected2 == -1 &&

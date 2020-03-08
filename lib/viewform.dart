@@ -1,10 +1,13 @@
-import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:vica2/tab_1.dart';
+import 'package:grouped_buttons/grouped_buttons.dart';
 import 'user.dart';
 import 'course.dart';
 import 'mainscreen.dart';
+
+String urlUpload = 'http://myondb.com/vicaProject/php/evaluate.php';
+
+String selected1, selected2, selected3, selected4, selected5, selected6, selected7;
 
 class ViewForm extends StatefulWidget {
   final Course course;
@@ -56,6 +59,7 @@ class _ViewFormState extends State<ViewForm> {
 class DetailInterface extends StatefulWidget {
   final Course course;
   final User user;
+
   DetailInterface({this.course, this.user});
 
   @override
@@ -67,17 +71,23 @@ class _DetailInterfaceState extends State<DetailInterface> {
   void initState() {
     super.initState();
   }
-
+  
+  GlobalKey<FormState> _globalKey = new GlobalKey();
+  bool _autoValidate = false;
+  
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Center(),
+        SizedBox(
+          height: 10,
+        ),
         Container(
-          width: 280,
-          height: 200,
+          width: 180,
+          height: 100,
           child: Image.network(
-              'http://myondb.com/oleproject/images/${widget.course.courseimage}.jpg',
+              'http://myondb.com/vicaProject/images/${widget.course.courseimage}.jpg',
               fit: BoxFit.fill),
         ),
         SizedBox(
@@ -88,30 +98,211 @@ class _DetailInterfaceState extends State<DetailInterface> {
               fontSize: 18,
               fontWeight: FontWeight.bold,
             )),
-        Text(widget.course.courseduration),
+        SizedBox(
+          height: 10,
+        ),
         Container(
           alignment: Alignment.topLeft,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 5,
-              ),
-              Table(children: [
-                TableRow(children: [
-                  Text("Course ",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(widget.course.coursedes),
-                ]),
-              ]),
-              SizedBox(
-                height: 10,
-              ),
-              
-            ],
-          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                  Widget>[
+            SizedBox(
+              height: 5,
+            ),
+            Text("Course ID : " + widget.course.courseid,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("Course Name : " + widget.course.coursename,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+      
+            //Course Evaluation Question
+            SizedBox(
+              height: 10,
+            ),
+            Text("Course",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                  color: Colors.blue,
+                )),
+            Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("Did the course content meet your expectations?"),
+           
+            SizedBox(
+              height: 5,
+            ),
+
+            Text("Question 2: ", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+                "How did you experience the speed or rate at which the training was presented?"),
+         
+            SizedBox(
+              height: 5,
+            ),
+
+            Text("Question 3: ", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+                "Can you practically apply the course material to your daily work situations?"),
+           
+            SizedBox(
+              height: 5,
+            ),
+
+            //Facilitator Evaluation Question
+            SizedBox(
+              height: 10,
+            ),
+            Text("Facilitator",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                  color: Colors.blue,
+                )),
+            Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+                "How knowledgeable was the facilitator on the subject matter?"),
+       
+            SizedBox(
+              height: 5,
+            ),
+
+            Text("Question 2: ", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+                "Did the facilitator explain the concepts clearly and in an understandable way?"),
+            
+            SizedBox(
+              height: 5,
+            ),
+
+            Text("Question 3: ", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("How did the facilitator handle questions that were asked?"),
+            
+            SizedBox(
+              height: 5,
+            ),
+
+            //Venue Evaluation Question
+            SizedBox(
+              height: 10,
+            ),
+            Text("Venue",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                  color: Colors.blue,
+                )),
+            Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+                "Was the venue sufficient for the type of training presented?"),
+            
+            SizedBox(
+              height: 5,
+            ),
+          ])),
+      
+        SizedBox(
+              height: 15,
         ),
-      ],
-    );
+      ]);
+    }
+  }
+/*
+  void validateAnswers() {
+    if (selected1 == -1 && selected2 == -1 &&
+        selected3 == -1 && selected4 == -1 &&
+        selected5 == -1 && selected6 == -1 &&
+        selected7 == -1) {
+      Fluttertoast.showToast(msg: 'Please select atleast one answer',
+          toastLength: Toast.LENGTH_SHORT);
+    } else {
+      Fluttertoast.showToast(
+          msg: 'Your total score is: $correctScore out of 5',
+          toastLength: Toast.LENGTH_LONG);
+    }
+  }
+*/
+/*
+  void _onRate() {
+      http.post(urlUpload, body: {
+        "selected1": selected1,
+        "selected2": selected2,
+        "selected3": selected3,
+        "selected4": selected4,
+        "selected5": selected5,
+        "selected6": selected6,
+        "selected7": selected7,
+        "email": widget.user.email,
+      }).then((res) {
+        print(res.statusCode);
+        Toast.show(res.body, context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        //pr.dismiss();
+        if (res.body == "Please rate for all question!") {
+          _showDialog();
+        } else {
+          _showSuccessRegister();
+          /*  Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => LoginScreen())); */
+        }
+      }).catchError((err) {
+        print(err);
+      });
+    } 
+
+
+    void _showDialog() {
+    print('Enter show dialog');
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Email has already been taken!'),
+            content:
+                const Text('Your entered email has been registered by other'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Try another'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('Already have account?'),
+                onPressed: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => TabScreen()));
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  void _showSuccessRegister() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Thanks for Registration'),
+            content: const Text('Please verify account from your email'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  'Ok',
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => TabScreen()));
+                },
+              )
+            ],
+          );
+        });
   }
 }
+*/

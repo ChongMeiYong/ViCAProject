@@ -10,21 +10,21 @@ $address = $_POST['address'];
 $encoded_string = $_POST["encoded_string"];
 $decoded_string = base64_decode($encoded_string);
 
-$sqlinsert = "INSERT INTO USER(NAME, EMAIL, PASSWORD, PHONE, DOB, ADDRESS, VERIFY) VALUES ('$name','$email','$password','$phone','$dob','$address','1')";
+$sqlinsert = "INSERT INTO USER(name, email, password, phone, dob, address, verify) VALUES ('$name','$email','$password','$phone','$dob','$address','0')";
 if ($conn->query($sqlinsert) === TRUE) {
     $path = '../profile/'.$email.'.jpg';
     file_put_contents($path, $decoded_string);
     sendEmail($email);
     echo "Register Successful";
 } else {
-    echo "Email Registered! Please try again";
+    echo "Email Registered! Please try another Email";
 }
 
 function sendEmail($useremail) {
     $to      = $useremail; 
-    $subject = 'Verification for Login'; 
-    $message = 'http://myondb/vicaProject/php/verify.php?email='.$useremail; 
-    $headers = 'From: noreply@vica.com.my' . "\r\n" . 
+    $subject = 'Verification for ViCA'; 
+    $message = 'http://myondb.com/vicaProject/php/verify.php?email='.$useremail; 
+    $headers = 'From: noreply@vicaProject.com.my' . "\r\n" . 
     'Reply-To: '.$useremail . "\r\n" . 
     'X-Mailer: PHP/' . phpversion(); 
     mail($to, $subject, $message, $headers); 
