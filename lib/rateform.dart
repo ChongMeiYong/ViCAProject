@@ -1,13 +1,29 @@
-import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
-import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:vica2/tab_1.dart';
 import 'user.dart';
+import 'dart:async';
 import 'course.dart';
 import 'mainscreen.dart';
+import 'package:toast/toast.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
-String urlUpload = 'http://myondb.com/vicaProject/php/evaluate.php';
-
-String selected1, selected2, selected3, selected4, selected5, selected6, selected7;
+String selected1 ,
+    selected2 ,
+    selected3 ,
+    selected4 ,
+    selected5 ,
+    selected6 ,
+    selected7 ;
+String _selected1 ,
+    _selected2 ,
+    _selected3 ,
+    _selected4 ,
+    _selected5 ,
+    _selected6 ,
+    _selected7 ;
 
 class RateForm extends StatefulWidget {
   final Course course;
@@ -71,42 +87,48 @@ class _DetailInterfaceState extends State<DetailInterface> {
   void initState() {
     super.initState();
   }
-  
+
   GlobalKey<FormState> _globalKey = new GlobalKey();
   bool _autoValidate = false;
-  
+  String selected1,
+      selected2,
+      selected3,
+      selected4,
+      selected5,
+      selected6,
+      selected7;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Center(),
-        Text("Evaluation Form",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            )),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: 180,
-          height: 100,
-          child: Image.network(
-              'http://myondb.com/vicaProject/images/${widget.course.courseimage}.jpg',
-              fit: BoxFit.fill),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(widget.course.coursename.toUpperCase(),
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            )),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
+    return Column(children: <Widget>[
+      Center(),
+      Text("Evaluation Form",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          )),
+      SizedBox(
+        height: 10,
+      ),
+      Container(
+        width: 180,
+        height: 100,
+        child: Image.network(
+            'http://myondb.com/vicaProject/images/${widget.course.courseimage}.jpg',
+            fit: BoxFit.fill),
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Text(widget.course.coursename.toUpperCase(),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          )),
+      SizedBox(
+        height: 10,
+      ),
+      Container(
           alignment: Alignment.topLeft,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
@@ -118,7 +140,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Course Name : " + widget.course.coursename,
                 style: TextStyle(fontWeight: FontWeight.bold)),
-      
+
             //Course Evaluation Question
             SizedBox(
               height: 10,
@@ -132,6 +154,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Did the course content meet your expectations?"),
             RadioButtonGroup(
+              //validator: _validateName,
                 orientation: GroupedButtonsOrientation.HORIZONTAL,
                 labels: <String>[
                   "Bad",
@@ -139,7 +162,8 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (String selected1) => print(selected1)),
+                onSelected: (selected1) => setS1(selected1)              
+            ),
             SizedBox(
               height: 5,
             ),
@@ -155,7 +179,8 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (String selected2) => print(selected2)),
+                onSelected: (selected2) => setS2(selected2) 
+            ),
             SizedBox(
               height: 5,
             ),
@@ -171,7 +196,8 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (String selected3) => print(selected3)),
+                onSelected: (selected3) => setS3(selected3) 
+            ),
             SizedBox(
               height: 5,
             ),
@@ -197,7 +223,8 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (String selected4) => print(selected4)),
+                onSelected: (selected4) => setS4(selected4) 
+            ),
             SizedBox(
               height: 5,
             ),
@@ -213,7 +240,8 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (String selected5) => print(selected5)),
+                onSelected: (selected5) => setS5(selected5) 
+            ),
             SizedBox(
               height: 5,
             ),
@@ -228,7 +256,8 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (String selected6) => print(selected6)),
+                onSelected: (selected6) => setS6(selected6) 
+            ),
             SizedBox(
               height: 5,
             ),
@@ -247,143 +276,233 @@ class _DetailInterfaceState extends State<DetailInterface> {
             Text(
                 "Was the venue sufficient for the type of training presented?"),
             RadioButtonGroup(
-                orientation: GroupedButtonsOrientation.HORIZONTAL,               
+                orientation: GroupedButtonsOrientation.HORIZONTAL,
                 labels: <String>[
                   "Bad",
                   "Average",
                   "Good",
                   "Excellent",
-                ],               
-                onSelected: (String selected7) => print(selected7)
+                ],
+                onSelected: (selected7) => setS7(selected7) 
             ),
             SizedBox(
               height: 5,
             ),
           ])),
-      
-        SizedBox(
-              height: 15,
+      SizedBox(
+        height: 15,
+      ),
+      Container(
+        width: 350,
+        child: MaterialButton(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          height: 40,
+          child: Text(
+            'Rate',
+            style: TextStyle(fontSize: 16),
+          ),
+          color: Colors.blueAccent,
+          textColor: Colors.white,
+          elevation: 5,
+          onPressed: _validateInputs,
         ),
+        //MapSample(),
+      ),
+    ]);
+  }
 
-        Container(
-                width: 350,
-                child: MaterialButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0)),
-                  height: 40,
-                  child: Text(
-                    'Rate',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  color: Colors.blueAccent,
-                  textColor: Colors.white,
-                  elevation: 5,
-                  //onPressed: _validateAnswers,             
-                ),
-                //MapSample(),
-        ),        
-      ]);
-    }
+  void setS1(String s1) {
+    _selected1 = s1 ;
   }
-  
-/*
-  void validateAnswers() {
-    if (selected1 == -1 && selected2 == -1 &&
-        selected3 == -1 && selected4 == -1 &&
-        selected5 == -1 && selected6 == -1 &&
-        selected7 == -1) {
-      Fluttertoast.showToast(msg: 'Please select atleast one answer',
-          toastLength: Toast.LENGTH_SHORT);
-    } else {
-      Fluttertoast.showToast(
-          msg: 'Your total score is: $correctScore out of 5',
-          toastLength: Toast.LENGTH_LONG);
-    }
+
+  void setS2(String s2) {
+     _selected2 = s2 ;
   }
-*/
-/*
-  void _onRate() {
-      http.post(urlUpload, body: {
-        "selected1": selected1,
-        "selected2": selected2,
-        "selected3": selected3,
-        "selected4": selected4,
-        "selected5": selected5,
-        "selected6": selected6,
-        "selected7": selected7,
-        "email": widget.user.email,
-      }).then((res) {
-        print(res.statusCode);
-        Toast.show(res.body, context,
+
+  void setS3(String s3) {
+    _selected3 = s3 ;
+  }
+
+  void setS4(String s4) {
+    _selected4 = s4 ;
+  }
+
+  void setS5(String s5) {
+    _selected5 = s5 ;
+  }
+
+  void setS6(String s6) {
+    _selected6 = s6 ;
+  }
+
+  void setS7(String s7) {
+    _selected7 = s7;
+  }
+
+  Future<String> rateCourse() async {
+    String urlUpload = "http://myondb.com/vicaProject/php/evaluate.php";
+    ProgressDialog pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    pr.style(message: "Rating..");
+    pr.show();
+    http.post(urlUpload, body: {
+      "selected1": _selected1,
+      "selected2": _selected2,
+      "selected3": _selected3,
+      "selected4": _selected4,
+      "selected5": _selected5,
+      "selected6": _selected6,
+      "selected7": _selected7,
+      "email": widget.user.email,
+      "courseid": widget.course.courseid,
+      "coursename": widget.course.coursename,
+    }).then((res) {
+      if (res.body == "success") {
+        Toast.show("success", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM); 
+        pr.dismiss();  
+        setS1(null);setS2(null);setS3(null);setS4(null);
+        setS5(null);setS6(null);setS7(null); 
+        _showSuccessRate();     
+      } else {
+        Toast.show("Sorry, this course has been rated. Please rate for other course.", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        //pr.dismiss();
-        if (res.body == "Please rate for all question!") {
-          _showDialog();
-        } else {
-          _showSuccessRegister();
-          /*  Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => LoginScreen())); */
-        }
-      }).catchError((err) {
-        print(err);
-      });
-    } 
+        pr.dismiss(); 
+        _showDialog();
+      }
+    }).catchError((err) {
+      print(err);
+      pr.dismiss();
+    });
+    return null;
+  }
 
-
-    void _showDialog() {
-    print('Enter show dialog');
-    showDialog(
+  void _validateInputs() {
+    if (_selected1 == null ||
+        _selected2 == null ||
+        _selected3 == null ||
+        _selected4 == null ||
+        _selected5 == null ||
+        _selected6 == null ||
+        _selected7 == null) {
+      showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Email has already been taken!'),
-            content:
-                const Text('Your entered email has been registered by other'),
+            title: new Text("Remind"),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text("Please rate for all question!"),
+            ),
             actions: <Widget>[
-              FlatButton(
-                child: Text('Try another'),
+              new FlatButton(
+                child: new Text(
+                  "OK",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                color: Colors.lightBlueAccent,
               ),
-              FlatButton(
-                child: Text('Already have account?'),
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => TabScreen()));
-                },
-              )
             ],
           );
-        });
+        },
+      );
+      //_showSnackBar("Please rate for for all questions.");
+    } else {
+      // Every of the data in the form are valid at this point
+      rateCourse();      
+    }
   }
 
-  void _showSuccessRegister() {
-    showDialog(
+  void _showDialog() {
+       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Thanks for Registration'),
-            content: const Text('Please verify account from your email'),
+            title: new Text("Sorry!"),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text("Course Rated! Please Rate for other Course."),
+            ),
             actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  'Ok',
-                  textAlign: TextAlign.center,
+              new FlatButton(
+                child: new Text(
+                  "OK",
+                  style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
+                },
+                color: Colors.lightBlueAccent,
+              ),
+            ],
+          );
+        },
+      );
+  }
+
+  void _showSuccessRate() {
+       showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text("Thank You"),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text("Rated Success!"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text(
+                  "OK",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  //Navigator.of(context).pop();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => TabScreen()));
+                          builder: (BuildContext context) => MainScreen(user: widget.user)));
                 },
-              )
+                color: Colors.lightBlueAccent,
+              ),
             ],
           );
-        });
+        },
+      );
   }
+
+/*
+  Future<void> _ackAlert(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Remind'),
+        content: const Text('Please rate for for all questions.'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 */
+
+}
+/*
+  void _showSnackBar(message) {
+    final snackBar = new SnackBar(
+      content: new Text(message),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+  */

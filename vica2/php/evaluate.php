@@ -9,14 +9,29 @@ $selected5 = $_POST['selected5'];
 $selected6 = $_POST['selected6'];
 $selected7 = $_POST['selected7'];
 $email = $_POST['email'];
+$courseid = $_POST['courseid'];
+$coursename = $_POST['coursename'];
+$errors   = array();
 
-$sqlinsert = "INSERT INTO EVALUATE(selected1, selected2, selected3, selected4, 
-             selected5, selected6, selected7, email) VALUES ('$selected1',
+$sql = "SELECT * FROM EVALUATE WHERE courseid = '$courseid' AND email = '$email' LIMIT 1";
+$result = $conn->query($sql);
+$evaluate = mysqli_fetch_assoc($result);
+
+if($evaluate) {
+    if( ($evaluate['courseid'] === $courseid) AND ($evaluate['email'] === $email)){
+    array_push($errors, "Sorry, this course has been rated. Please rate for other course.");
+    }
+}
+
+if(count($errors) == 0) {
+    $query = "INSERT INTO EVALUATE(selected1, selected2, selected3, selected4, 
+             selected5, selected6, selected7, email, courseid, coursename) VALUES ('$selected1',
              '$selected2','$selected3','$selected4','$selected5','$selected6',
-             '$selected7','$email')";
-if ($conn->query($sqlinsert) === TRUE) {
-    echo "Rate Successful";
-} else {
-    echo "Please rate for all question!";
+             '$selected7','$email','$courseid','$coursename')";
+    $conn->query($query);
+    echo "success";
+}else {
+    echo "error";
 }
 ?>
+
