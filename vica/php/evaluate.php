@@ -19,7 +19,7 @@ $evaluate = mysqli_fetch_assoc($result);
 
 if($evaluate) {
     if( ($evaluate['courseid'] === $courseid) AND ($evaluate['email'] === $email)){
-    array_push($errors, "Sorry, this course has been rated. Please rate for other course.");
+        array_push($errors, "Sorry, this course has been rated. Please rate for other course.");
     }
 }
 
@@ -33,5 +33,6 @@ if(count($errors) == 0) {
 }else {
     echo "error";
 }
-?>
 
+$conn->close();
+?>

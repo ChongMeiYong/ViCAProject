@@ -90,13 +90,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
 
   GlobalKey<FormState> _globalKey = new GlobalKey();
   bool _autoValidate = false;
-  String selected1,
-      selected2,
-      selected3,
-      selected4,
-      selected5,
-      selected6,
-      selected7;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -361,12 +355,13 @@ class _DetailInterfaceState extends State<DetailInterface> {
       if (res.body == "success") {
         Toast.show("success", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM); 
+        
         pr.dismiss();  
         setS1(null);setS2(null);setS3(null);setS4(null);
         setS5(null);setS6(null);setS7(null); 
-        _showSuccessRate();     
+        _showSuccessRate(); 
       } else {
-        Toast.show("Sorry, this course has been rated. Please rate for other course.", context,
+        Toast.show("Sorry, Please try again!", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         pr.dismiss(); 
         _showDialog();
@@ -474,35 +469,4 @@ class _DetailInterfaceState extends State<DetailInterface> {
         },
       );
   }
-
-/*
-  Future<void> _ackAlert(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Remind'),
-        content: const Text('Please rate for for all questions.'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
 }
-*/
-
-}
-/*
-  void _showSnackBar(message) {
-    final snackBar = new SnackBar(
-      content: new Text(message),
-    );
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-  }
-  */

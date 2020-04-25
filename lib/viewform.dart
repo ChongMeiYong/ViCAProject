@@ -1,19 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:grouped_buttons/grouped_buttons.dart';
 import 'user.dart';
 import 'course.dart';
+import 'rate.dart';
 import 'mainscreen.dart';
+import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
 
-String urlUpload = 'http://myondb.com/vicaProject/php/evaluate.php';
+double perpage = 1;
+String urlgetresult = "http://myondb.com/vicaProject/php/get_result.php";
 
 String selected1, selected2, selected3, selected4, selected5, selected6, selected7;
 
 class ViewForm extends StatefulWidget {
   final Course course;
   final User user;
+  final Rate rate;
 
-  const ViewForm({Key key, this.course, this.user}) : super(key: key);
+  ViewForm({this.course, this.user, this.rate});
 
   @override
   _ViewFormState createState() => _ViewFormState();
@@ -38,6 +44,7 @@ class _ViewFormState extends State<ViewForm> {
               child: DetailInterface(
                 course: widget.course,
                 user: widget.user,
+                rate: widget.rate,
               ),
             ),
           )),
@@ -59,17 +66,23 @@ class _ViewFormState extends State<ViewForm> {
 class DetailInterface extends StatefulWidget {
   final Course course;
   final User user;
+  final Rate rate;
 
-  DetailInterface({this.course, this.user});
+  DetailInterface({this.course, this.user, this.rate});
 
   @override
   _DetailInterfaceState createState() => _DetailInterfaceState();
 }
 
 class _DetailInterfaceState extends State<DetailInterface> {
+  GlobalKey<RefreshIndicatorState> refreshKey;
+  List data;
+
   @override
   void initState() {
     super.initState();
+    refreshKey = GlobalKey<RefreshIndicatorState>();
+    makeRequest();
   }
   
   GlobalKey<FormState> _globalKey = new GlobalKey();
@@ -80,6 +93,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
     return Column(
       children: <Widget>[
         Center(),
+        
         SizedBox(
           height: 10,
         ),
@@ -100,6 +114,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
             )),
         SizedBox(
           height: 10,
+          
         ),
         Container(
           alignment: Alignment.topLeft,
@@ -126,22 +141,23 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Did the course content meet your expectations?"),
+            //Text("Answer :  " + widget.rate.selected1),
            
             SizedBox(
               height: 5,
             ),
 
             Text("Question 2: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(
-                "How did you experience the speed or rate at which the training was presented?"),
+            Text("How did you experience the speed or rate at which the training was presented?"),
+            //Text(widget.rate.selected2),
          
             SizedBox(
               height: 5,
             ),
 
             Text("Question 3: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(
-                "Can you practically apply the course material to your daily work situations?"),
+            Text("Can you practically apply the course material to your daily work situations?"),
+            //Text(widget.rate.selected3),
            
             SizedBox(
               height: 5,
@@ -158,16 +174,16 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   color: Colors.blue,
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(
-                "How knowledgeable was the facilitator on the subject matter?"),
+            Text("How knowledgeable was the facilitator on the subject matter?"),
+            //Text(widget.rate.selected4),
        
             SizedBox(
               height: 5,
             ),
 
             Text("Question 2: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(
-                "Did the facilitator explain the concepts clearly and in an understandable way?"),
+            Text("Did the facilitator explain the concepts clearly and in an understandable way?"),
+            //Text(widget.rate.selected5),
             
             SizedBox(
               height: 5,
@@ -175,6 +191,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
 
             Text("Question 3: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("How did the facilitator handle questions that were asked?"),
+            //Text(data[index]['selected6'],),
             
             SizedBox(
               height: 5,
@@ -191,8 +208,8 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   color: Colors.blue,
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(
-                "Was the venue sufficient for the type of training presented?"),
+            Text("Was the venue sufficient for the type of training presented?"),
+            //Text(widget.rate.selected1),
             
             SizedBox(
               height: 5,
@@ -204,105 +221,28 @@ class _DetailInterfaceState extends State<DetailInterface> {
         ),
       ]);
     }
-  }
-/*
-  void validateAnswers() {
-    if (selected1 == -1 && selected2 == -1 &&
-        selected3 == -1 && selected4 == -1 &&
-        selected5 == -1 && selected6 == -1 &&
-        selected7 == -1) {
-      Fluttertoast.showToast(msg: 'Please select atleast one answer',
-          toastLength: Toast.LENGTH_SHORT);
-    } else {
-      Fluttertoast.showToast(
-          msg: 'Your total score is: $correctScore out of 5',
-          toastLength: Toast.LENGTH_LONG);
-    }
-  }
-*/
-/*
-  void _onRate() {
-      http.post(urlUpload, body: {
-        "selected1": selected1,
-        "selected2": selected2,
-        "selected3": selected3,
-        "selected4": selected4,
-        "selected5": selected5,
-        "selected6": selected6,
-        "selected7": selected7,
-        "email": widget.user.email,
-      }).then((res) {
-        print(res.statusCode);
-        Toast.show(res.body, context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        //pr.dismiss();
-        if (res.body == "Please rate for all question!") {
-          _showDialog();
-        } else {
-          _showSuccessRegister();
-          /*  Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => LoginScreen())); */
-        }
-      }).catchError((err) {
-        print(err);
+
+    Future<String> makeRequest() async {
+    String urlResult = "http://myondb.com/vicaProject/php/get_result.php";
+    ProgressDialog pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    pr.style(message: "Loading...");
+    pr.show();
+    http.post(urlResult, body: {
+      "email": widget.user.email,
+      "courseid": widget.course.courseid,
+    }).then((res) {
+      setState(() {
+        var extractdata = json.decode(res.body);
+        data = extractdata["course"];
+        print(data[0]);
+        pr.dismiss();
       });
-    } 
-
-
-    void _showDialog() {
-    print('Enter show dialog');
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Email has already been taken!'),
-            content:
-                const Text('Your entered email has been registered by other'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Try another'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: Text('Already have account?'),
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => TabScreen()));
-                },
-              )
-            ],
-          );
-        });
+    }).catchError((err) {
+      print(err);
+      pr.dismiss();
+    });
+    return null;
+  }
   }
 
-  void _showSuccessRegister() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Thanks for Registration'),
-            content: const Text('Please verify account from your email'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(
-                  'Ok',
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => TabScreen()));
-                },
-              )
-            ],
-          );
-        });
-  }
-}
-*/

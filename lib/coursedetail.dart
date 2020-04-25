@@ -77,18 +77,18 @@ class _DetailInterfaceState extends State<DetailInterface> {
           width: 280,
           height: 200,
           child: Image.network(
-              'http://myondb.com/vicaProject/images/${widget.course.image}.jpg',
+              'http://myondb.com/vicaProject/images/${['courseimage']}.jpg',
               fit: BoxFit.fill),
         ),
         SizedBox(
           height: 10,
         ),
-        Text(widget.course.cname.toUpperCase(),
+        Text(widget.course.coursename.toUpperCase(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             )),
-        Text(widget.course.duration),
+        Text(widget.course.courseduration),
         Container(
           alignment: Alignment.topLeft,
           child: Column(
@@ -101,7 +101,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 TableRow(children: [
                   Text("Course Description",
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(widget.course.descp),
+                  Text(widget.course.coursedes),
                 ]),
               ]),
               SizedBox(

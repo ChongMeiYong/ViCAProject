@@ -19,7 +19,6 @@ int number = 0;
 String _value;
 
 class TabScreenAdmin2 extends StatefulWidget {
-  //final String email;
   final Admin admin;
   TabScreenAdmin2({this.admin});
 

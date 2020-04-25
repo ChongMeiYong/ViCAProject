@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:vica2/homepage.dart';
+import 'package:vica2/rate.dart';
 import 'package:vica2/rateform.dart';
 import 'package:vica2/viewform.dart';
-//import 'SlideRightRoute.dart';
 import 'user.dart';
 import 'course.dart';
 import 'package:http/http.dart' as http;
@@ -14,8 +13,9 @@ double perpage = 1;
 
 class TabScreen extends StatefulWidget {
   final User user;
+  final Rate rate;
 
-  TabScreen({Key key, this.user}) : super(key: key);
+  TabScreen({Key key, this.user, this.rate}) : super(key: key);
 
   @override
   _TabScreenState createState() => _TabScreenState();
@@ -111,11 +111,16 @@ class _TabScreenState extends State<TabScreen> {
                               data[index]['coursename'],
                               data[index]['courseduration'],
                               data[index]['coursedes'],
-                              data[index]['courseimage'],
-                              //data[index]['postdate'],
+                              data[index]['courseimage'],                            
                               data[index]['userenroll'],
                               widget.user.email,
-                              //widget.user.name,
+                              data[index]['selected1'],
+                              data[index]['selected2'],
+                              data[index]['selected3'],
+                              data[index]['selected4'],
+                              data[index]['selected5'],
+                              data[index]['selected6'],
+                              data[index]['selected7'],
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
@@ -185,12 +190,36 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   Future init() async {
-    this.makeRequest();
+    this.makeRequest(); this.makeRequest2();
   }
 
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 2));
     this.makeRequest();
+    return null;
+  }
+
+  Future<String> makeRequest2() async {
+    String urlResult= "http://myondb.com/vicaProject/php/get_result.php";
+    ProgressDialog pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    pr.style(message: "Loading...");
+    pr.show();
+    http.post(urlResult, body: {
+      "email": widget.user.email,
+      "courseid": widget.rate.courseid,
+    }).then((res) {
+      setState(() {
+        var extractdata = json.decode(res.body);
+        data = extractdata["result"];
+        perpage = (data.length / 10);
+        print("data");
+        pr.dismiss();
+      });
+    }).catchError((err) {
+      print(err);
+      pr.dismiss();
+    });
     return null;
   }
 
@@ -200,10 +229,15 @@ class _TabScreenState extends State<TabScreen> {
     String courseduration,
     String coursedes,
     String courseimage,
-    //String postdate,
     String userenroll,
     String email,
-    //String name
+    String selected1,
+    String selected2,
+    String selected3,
+    String selected4,
+    String selected5,
+    String selected6,
+    String selected7,
   ) {
     Course course = new Course(
       courseid: courseid,
@@ -211,8 +245,20 @@ class _TabScreenState extends State<TabScreen> {
       courseduration: courseduration,
       coursedes: coursedes,
       courseimage: courseimage,
-      //postdate: postdate,
       userenroll: userenroll,
+    );
+
+    Rate rate = new Rate(
+      email: email,
+      courseid: courseid,
+      coursename: coursename,
+      selected1: selected1,
+      selected2: selected2,
+      selected3: selected3,
+      selected4: selected4,
+      selected5: selected5,
+      selected6: selected6,
+      selected7: selected7,
     );
 
     showDialog(
@@ -226,13 +272,13 @@ class _TabScreenState extends State<TabScreen> {
               new FlatButton(
                   child: new Text("View Rated Form"),
                   onPressed: () {
+                    //_onRateDetail(email, courseid, coursename, selected1, selected2, selected3, selected4, selected5, selected6, selected7);
                     Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ViewForm(
-                                course: course, user: widget.user)));
-                                
+                                course: course, user: widget.user)));                                
                   }),
               new FlatButton(
                 child: new Text("Rate Course"),
