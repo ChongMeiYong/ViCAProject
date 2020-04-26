@@ -114,13 +114,6 @@ class _TabScreenState extends State<TabScreen> {
                               data[index]['courseimage'],                            
                               data[index]['userenroll'],
                               widget.user.email,
-                              data[index]['selected1'],
-                              data[index]['selected2'],
-                              data[index]['selected3'],
-                              data[index]['selected4'],
-                              data[index]['selected5'],
-                              data[index]['selected6'],
-                              data[index]['selected7'],
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
@@ -190,36 +183,12 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   Future init() async {
-    this.makeRequest(); this.makeRequest2();
+    this.makeRequest();
   }
 
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 2));
     this.makeRequest();
-    return null;
-  }
-
-  Future<String> makeRequest2() async {
-    String urlResult= "http://myondb.com/vicaProject/php/get_result.php";
-    ProgressDialog pr = new ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
-    pr.style(message: "Loading...");
-    pr.show();
-    http.post(urlResult, body: {
-      "email": widget.user.email,
-      "courseid": widget.rate.courseid,
-    }).then((res) {
-      setState(() {
-        var extractdata = json.decode(res.body);
-        data = extractdata["result"];
-        perpage = (data.length / 10);
-        print("data");
-        pr.dismiss();
-      });
-    }).catchError((err) {
-      print(err);
-      pr.dismiss();
-    });
     return null;
   }
 
@@ -231,13 +200,6 @@ class _TabScreenState extends State<TabScreen> {
     String courseimage,
     String userenroll,
     String email,
-    String selected1,
-    String selected2,
-    String selected3,
-    String selected4,
-    String selected5,
-    String selected6,
-    String selected7,
   ) {
     Course course = new Course(
       courseid: courseid,
@@ -246,19 +208,6 @@ class _TabScreenState extends State<TabScreen> {
       coursedes: coursedes,
       courseimage: courseimage,
       userenroll: userenroll,
-    );
-
-    Rate rate = new Rate(
-      email: email,
-      courseid: courseid,
-      coursename: coursename,
-      selected1: selected1,
-      selected2: selected2,
-      selected3: selected3,
-      selected4: selected4,
-      selected5: selected5,
-      selected6: selected6,
-      selected7: selected7,
     );
 
     showDialog(

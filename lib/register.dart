@@ -44,7 +44,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           //resizeToAvoidBottomInset: false,
           //resizeToAvoidBottomPadding: false,
           appBar: AppBar(
-            title: Text('REGISTER', style: TextStyle(color: Colors.black),),
+            title: Text('CREATE NEW ACCOUNT', style: TextStyle(color: Colors.black),),
             //leading: new Container(),
           ),
           body: SingleChildScrollView(
@@ -217,7 +217,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           padding: EdgeInsets.only(top: 10, bottom: 10),
           child: MaterialButton(
             child: Text(
-              'REGISTER',
+              'CREATE NEW ACCOUNT',
               style: TextStyle(
                   color: Colors.white, fontSize: 18, letterSpacing: 0.8),
             ),

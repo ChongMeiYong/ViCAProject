@@ -135,16 +135,6 @@ class _TabScreen3State extends State<TabScreen3> {
                                   onPressed: _changePassword,
                                 ),
                                 InfoCard(
-                                  text: "REGISTER",
-                                  icon: Icons.note,
-                                  onPressed: _registerAccount,
-                                ),
-                                InfoCard(
-                                  text: "LOG IN",
-                                  icon: Icons.open_in_new,
-                                  onPressed: _gotologinPage,
-                                ),
-                                InfoCard(
                                   text: "LOG OUT",
                                   icon: Icons.exit_to_app,
                                   onPressed: _logout,

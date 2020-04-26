@@ -17,12 +17,13 @@ String selected1, selected2, selected3, selected4, selected5, selected6, selecte
 class ViewForm extends StatefulWidget {
   final Course course;
   final User user;
-  //final Rate rate;
-
-  ViewForm({this.course, this.user});
+  final Rate rate;
+  
+  ViewForm({this.course, this.user, this.rate});
 
   @override
   _ViewFormState createState() => _ViewFormState();
+  
 }
 
 class _ViewFormState extends State<ViewForm> {
@@ -82,6 +83,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
   void initState() {
     super.initState();
     refreshKey = GlobalKey<RefreshIndicatorState>();
+    init();
     makeRequest();
   }
   
@@ -92,8 +94,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Center(),
-        
+        Center(),        
         SizedBox(
           height: 10,
         ),
@@ -141,7 +142,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Did the course content meet your expectations?"),
-            //Text("Answer :  " + widget.rate.selected1),
+            Text("Rate :  " + selected6, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
            
             SizedBox(
               height: 5,
@@ -149,7 +150,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
 
             Text("Question 2: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("How did you experience the speed or rate at which the training was presented?"),
-            //Text(widget.rate.selected2),
+            Text("Rate :  " + selected2, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
          
             SizedBox(
               height: 5,
@@ -157,7 +158,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
 
             Text("Question 3: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Can you practically apply the course material to your daily work situations?"),
-            //Text(widget.rate.selected3),
+            Text("Rate :  " + selected3, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
            
             SizedBox(
               height: 5,
@@ -175,7 +176,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("How knowledgeable was the facilitator on the subject matter?"),
-            //Text(widget.rate.selected4),
+            Text("Rate :  " + selected4, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
        
             SizedBox(
               height: 5,
@@ -183,7 +184,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
 
             Text("Question 2: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Did the facilitator explain the concepts clearly and in an understandable way?"),
-            //Text(widget.rate.selected5),
+            Text("Rate :  " + selected5, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
             
             SizedBox(
               height: 5,
@@ -191,7 +192,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
 
             Text("Question 3: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("How did the facilitator handle questions that were asked?"),
-            //Text(data[index]['selected6'],),
+            Text("Rate :  " + selected6, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
             
             SizedBox(
               height: 5,
@@ -209,7 +210,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Was the venue sufficient for the type of training presented?"),
-            Text(widget.rate.selected1),
+            Text("Rate :  " + selected7, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
             
             SizedBox(
               height: 5,
@@ -237,7 +238,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
         data = extractdata["course"];
         print(data[0]);
         _onFormDetail(
-          selected1, selected2, selected3, selected4, selected5, selected6, selected7);
+          data[0], data[1], data[2], data[3], data[4], data[5], data[6]);
         pr.dismiss();
       });
     }).catchError((err) {
@@ -247,23 +248,18 @@ class _DetailInterfaceState extends State<DetailInterface> {
     return null;
   }
 
-  void _onFormDetail(
-    String selected1,
-    String selected2,
-    String selected3,
-    String selected4,
-    String selected5,
-    String selected6,
-    String selected7,
-  ) {
-    Rate rate = new Rate(
-      selected1: selected1,
-      selected2: selected2,
-      selected3: selected3,
-      selected4: selected4,
-      selected5: selected5,
-      selected6: selected6,
-      selected7: selected7,
-    );
+  Future init() async {
+    this.makeRequest();
+  }
+
+  void _onFormDetail(String d0, d1, d2, d3, d4, d5, d6) {
+    selected1 = d0 ;
+    selected2 = d1 ;
+    selected3 = d2 ;
+    selected4 = d3 ;
+    selected5 = d4 ;
+    selected6 = d5 ;
+    selected7 = d6 ;
+  }
  }
-}
+

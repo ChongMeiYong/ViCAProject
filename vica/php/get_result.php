@@ -10,16 +10,13 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $response["course"] = array();
     while ($row = $result ->fetch_assoc()){
-        $courselist = array();
-        $courselist[selected1] = $row["selected1"];
-        $courselist[selected2] = $row["selected2"];
-        $courselist[selected3] = $row["selected3"];
-        $courselist[selected4] = $row["selected4"];
-        $courselist[selected5] = $row["selected5"];
-        $courselist[selected6] = $row["selected6"];
-        $courselist[selected7] = $row["selected7"];
-        
-        array_push($response["course"], $courselist);    
+        array_push($response["course"], $row["selected1"]);
+        array_push($response["course"], $row["selected2"]);
+        array_push($response["course"], $row["selected3"]);
+        array_push($response["course"], $row["selected4"]);
+        array_push($response["course"], $row["selected5"]);
+        array_push($response["course"], $row["selected6"]);
+        array_push($response["course"], $row["selected7"]);
    }
     echo json_encode($response);
 }else{
