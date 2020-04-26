@@ -17,7 +17,7 @@ class InfoCard extends StatelessWidget {
       onTap: onPressed,
       child: Card(
         color: Colors.white,
-        margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 25.0),
+        margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 19.0),
         child: ListTile(
           leading: Icon(
             icon,

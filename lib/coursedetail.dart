@@ -2,15 +2,18 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:vica2/tab_1.dart';
+import 'admin.dart';
 import 'user.dart';
 import 'course.dart';
-import 'mainscreen.dart';
+import 'viewcourse.dart';
 
 class CourseDetail extends StatefulWidget {
   final Course course;
   final User user;
+  final Admin admin;
 
-  const CourseDetail({Key key, this.course, this.user}) : super(key: key);
+  const CourseDetail({Key key, this.course, this.user, this.admin})
+      : super(key: key);
 
   @override
   _CourseDetailState createState() => _CourseDetailState();
@@ -45,8 +48,8 @@ class _CourseDetailState extends State<CourseDetail> {
     Navigator.pop(
         context,
         MaterialPageRoute(
-          builder: (context) => MainScreen(
-            user: widget.user,
+          builder: (context) => ViewCourse(
+            admin: widget.admin,
           ),
         ));
     return Future.value(false);
@@ -70,6 +73,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
 
   @override
   Widget build(BuildContext context) {
+    Size media = MediaQuery.of(context).size;
     return Column(
       children: <Widget>[
         Center(),
@@ -77,7 +81,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
           width: 280,
           height: 200,
           child: Image.network(
-              'http://myondb.com/vicaProject/images/${['courseimage']}.jpg',
+              'http://myondb.com/vicaProject/images/${widget.course.courseimage}.jpg',
               fit: BoxFit.fill),
         ),
         SizedBox(
@@ -88,47 +92,34 @@ class _DetailInterfaceState extends State<DetailInterface> {
               fontSize: 18,
               fontWeight: FontWeight.bold,
             )),
-        Text(widget.course.courseduration),
         Container(
           alignment: Alignment.topLeft,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               SizedBox(
-                height: 5,
+                height: 15,
               ),
-              Table(children: [
-                TableRow(children: [
-                  Text("Course Description",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(widget.course.coursedes),
-                ]),
-              ]),
+              Text("Course Description",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              Divider(
+                height: 12,
+                color: Colors.blue[300],
+                thickness: 2.5,
+                endIndent: media.width / 2.4,
+              ),
               SizedBox(
                 height: 10,
               ),
-              Container(
-                width: 350,
-                child: MaterialButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0)),
-                  height: 40,
-                  child: Text(
-                    'Course Details',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  color: Colors.blueAccent,
-                  textColor: Colors.white,
-                  elevation: 5,
-                  onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => TabScreen()));
-                },
-                ),
-                //MapSample(),
+              Text("Duration : " + widget.course.courseduration, 
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(widget.course.coursedes),
+              SizedBox(
+                height: 10,
               ),
             ],
           ),

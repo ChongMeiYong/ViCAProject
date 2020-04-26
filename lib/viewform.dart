@@ -17,9 +17,9 @@ String selected1, selected2, selected3, selected4, selected5, selected6, selecte
 class ViewForm extends StatefulWidget {
   final Course course;
   final User user;
-  final Rate rate;
+  //final Rate rate;
 
-  ViewForm({this.course, this.user, this.rate});
+  ViewForm({this.course, this.user});
 
   @override
   _ViewFormState createState() => _ViewFormState();
@@ -44,7 +44,7 @@ class _ViewFormState extends State<ViewForm> {
               child: DetailInterface(
                 course: widget.course,
                 user: widget.user,
-                rate: widget.rate,
+                //rate: widget.rate,
               ),
             ),
           )),
@@ -209,7 +209,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Was the venue sufficient for the type of training presented?"),
-            //Text(widget.rate.selected1),
+            Text(widget.rate.selected1),
             
             SizedBox(
               height: 5,
@@ -236,6 +236,8 @@ class _DetailInterfaceState extends State<DetailInterface> {
         var extractdata = json.decode(res.body);
         data = extractdata["course"];
         print(data[0]);
+        _onFormDetail(
+          selected1, selected2, selected3, selected4, selected5, selected6, selected7);
         pr.dismiss();
       });
     }).catchError((err) {
@@ -244,5 +246,24 @@ class _DetailInterfaceState extends State<DetailInterface> {
     });
     return null;
   }
-  }
 
+  void _onFormDetail(
+    String selected1,
+    String selected2,
+    String selected3,
+    String selected4,
+    String selected5,
+    String selected6,
+    String selected7,
+  ) {
+    Rate rate = new Rate(
+      selected1: selected1,
+      selected2: selected2,
+      selected3: selected3,
+      selected4: selected4,
+      selected5: selected5,
+      selected6: selected6,
+      selected7: selected7,
+    );
+ }
+}

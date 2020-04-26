@@ -1,21 +1,26 @@
-/*
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vica2/mainscreenAdmin.dart';
+import 'package:vica2/rate.dart';
 import 'package:vica2/rateform.dart';
-import 'package:vica2/tabAdmin_1.dart';
+import 'package:vica2/user.dart';
 import 'package:vica2/viewform.dart';
-import 'user.dart';
+import 'admin.dart';
 import 'course.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 
+import 'coursedetail.dart';
+
 double perpage = 1;
 
 class ViewCourse extends StatefulWidget {
+  final Admin admin;
   final User user;
+  final Rate rate;
 
-  ViewCourse({Key key, this.user}) : super(key: key);
+  ViewCourse({Key key, this.admin, this.user, this.rate}) : super(key: key);
 
   @override
   _ViewCourseState createState() => _ViewCourseState();
@@ -26,18 +31,23 @@ class _ViewCourseState extends State<ViewCourse> {
   List data;
 
   @override
+  void initState() {
+    super.initState();
+    refreshKey = GlobalKey<RefreshIndicatorState>();
+    init();
+    this.makeRequest();
+  }
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.blue));
+        SystemUiOverlayStyle(statusBarColor: Colors.blue[300]));
     return WillPopScope(
       onWillPop: _onBackPressAppBar,
       child: Scaffold(
-          backgroundColor: Colors.white,
           resizeToAvoidBottomPadding: false,
           appBar: AppBar(
-            title: Text(widget.user.name,
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            backgroundColor: Colors.blue,
+            title: Text('Taken Course'),
+            backgroundColor: Colors.blue[300],
           ),
             body: SafeArea(
               child: RefreshIndicator(
@@ -53,12 +63,15 @@ class _ViewCourseState extends State<ViewCourse> {
                       if (index == 0) {
                         return Container(
                           child: Column(children: <Widget>[
-                            Stack(children: <Widget>[  
+                            
                               Column(children: <Widget>[
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 
                               ]),
                             ]),
-                          ]),
+                          
                         );
                       }
                       if (index == data.length && perpage > 1) {
@@ -85,11 +98,9 @@ class _ViewCourseState extends State<ViewCourse> {
                               data[index]['coursename'],
                               data[index]['courseduration'],
                               data[index]['coursedes'],
-                              data[index]['courseimage'],
-                              //data[index]['postdate'],
+                              data[index]['courseimage'],                            
                               data[index]['userenroll'],
                               widget.user.email,
-                              //widget.user.name,
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
@@ -139,13 +150,12 @@ class _ViewCourseState extends State<ViewCourse> {
     Navigator.pop(
         context,
         MaterialPageRoute(
-          builder: (context) => TabScreenAdmin(
-            user: widget.user,
+          builder: (context) => MainScreenAdmin(
+            admin: widget.admin,
           ),
         ));
     return Future.value(false);
   }
-}
 
   Future<String> makeRequest() async {
     String urlCourse = "http://myondb.com/vicaProject/php/load_course.php";
@@ -171,12 +181,36 @@ class _ViewCourseState extends State<ViewCourse> {
   }
 
   Future init() async {
-    this.makeRequest();
+    this.makeRequest(); this.makeRequest2();
   }
 
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 2));
     this.makeRequest();
+    return null;
+  }
+
+  Future<String> makeRequest2() async {
+    String urlResult= "http://myondb.com/vicaProject/php/get_result.php";
+    ProgressDialog pr = new ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    pr.style(message: "Loading...");
+    pr.show();
+    http.post(urlResult, body: {
+      "email": widget.user.email,
+      "courseid": widget.rate.courseid,
+    }).then((res) {
+      setState(() {
+        var extractdata = json.decode(res.body);
+        data = extractdata["result"];
+        perpage = (data.length / 10);
+        print("data");
+        pr.dismiss();
+      });
+    }).catchError((err) {
+      print(err);
+      pr.dismiss();
+    });
     return null;
   }
 
@@ -186,10 +220,8 @@ class _ViewCourseState extends State<ViewCourse> {
     String courseduration,
     String coursedes,
     String courseimage,
-    //String postdate,
     String userenroll,
     String email,
-    //String name
   ) {
     Course course = new Course(
       courseid: courseid,
@@ -197,7 +229,6 @@ class _ViewCourseState extends State<ViewCourse> {
       courseduration: courseduration,
       coursedes: coursedes,
       courseimage: courseimage,
-      //postdate: postdate,
       userenroll: userenroll,
     );
 
@@ -206,22 +237,33 @@ class _ViewCourseState extends State<ViewCourse> {
         builder: (BuildContext context) {
           // return object of type Dialog
           return AlertDialog(
-            title: new Text("Choose to "),
+            title: new Text("Choose to View "),
             actions: <Widget>[
               // usually buttons at the bottom of the dialog
               new FlatButton(
-                  child: new Text("View Rated Form"),
+                  child: new Text(" Course Details"),
                   onPressed: () {
+                    //_onRateDetail(email, courseid, coursename, selected1, selected2, selected3, selected4, selected5, selected6, selected7);
                     Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ViewForm(
-                                course: course)));
-                                
+                            builder: (context) => 
+                              CourseDetail(course: course, user: widget.user)));             
                   }),
+              new FlatButton(
+                child: new Text("Rate Form"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ViewForm(course: course, user: widget.user)));
+                },
+              ),
             ],
           );
         });
   }
-  */
+}

@@ -81,19 +81,20 @@ class _DetailInterfaceState extends State<DetailInterface> {
           children: <Widget>[
             Row(children: <Widget>[
               Container(
-                height: media.height * 0.20,
+                height: media.height * 0.15,
                 width: media.width,
                 decoration: BoxDecoration(color: Colors.blue),
               )
             ]),
             Padding(
-              padding: EdgeInsets.only(top: 50, left: 35, right: 35, bottom: 5),
+              padding: EdgeInsets.only(top: 30, left: 35, right: 35, bottom: 5),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
-                  "http://myondb.com/vicaProject/profile/${['widget.user.email']}.jpg?dummy=${(number)}'",
+                  "http://myondb.com/vicaProject/profile/${widget.user.email}.jpg?dummy=${(number)}'",
                   fit: BoxFit.cover,
-                  //height: 150,
+                  height: 150,
+                  width: 150,
                 ),
               ),
             ),
@@ -149,11 +150,12 @@ class _DetailInterfaceState extends State<DetailInterface> {
                     height: 12,
                     color: Colors.blue[300],
                     thickness: 3,
-                    endIndent: media.width / 1.8,
+                    endIndent: media.width / 2.0,
                   ),
                   Text('* Click for edit data',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(width: 3),
+                          style: TextStyle(fontWeight: FontWeight.bold)
+                  ),
+                  SizedBox(width: 3),
                   SizedBox(height: 10),                  
                   InfoCard(
                     text: widget.user.email,

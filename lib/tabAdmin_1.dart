@@ -113,10 +113,7 @@ class _TabScreenAdminState extends State<TabScreenAdmin> {
                               data[index]['phone'],
                               data[index]['dob'],
                               data[index]['address'],
-                              //data[index]['postdate'],
-                              //data[index]['userenroll'],
-                              //widget.user.email,
-                              //widget.user.name,
+                              
                             ),
                           child: Padding(
                         padding: const EdgeInsets.all(5.0),
@@ -130,7 +127,7 @@ class _TabScreenAdminState extends State<TabScreenAdmin> {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                      "http://myondb.com/vicaProject/profile/${["widget.user.email"]}.jpg?dummy=${(number)}'")))),
+                                      "http://myondb.com/vicaProject/profile/${data[index]['email']}.jpg?dummy=${(number)}'")))),
                           Expanded(
                               child: Container(
                                   child: Column(
@@ -236,10 +233,21 @@ class _TabScreenAdminState extends State<TabScreenAdmin> {
                             builder: (context) => UserDetail(
                                 user: user)));
                                 
-                  }),
-                  /*
+                  }),                  
               new FlatButton(
                 child: new Text("View Taken Course"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ViewCourse(user: user)));
+                },
+              ),
+              /*
+              new FlatButton(
+                child: new Text("View Rating Form"),
                 onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.push(
