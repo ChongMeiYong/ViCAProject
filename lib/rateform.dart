@@ -10,20 +10,20 @@ import 'package:http/http.dart' as http;
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-String selected1 ,
-    selected2 ,
-    selected3 ,
-    selected4 ,
-    selected5 ,
-    selected6 ,
-    selected7 ;
-String _selected1 ,
-    _selected2 ,
-    _selected3 ,
-    _selected4 ,
-    _selected5 ,
-    _selected6 ,
-    _selected7 ;
+String selected1,
+    selected2,
+    selected3,
+    selected4,
+    selected5,
+    selected6,
+    selected7;
+String _selected1,
+    _selected2,
+    _selected3,
+    _selected4,
+    _selected5,
+    _selected6,
+    _selected7;
 
 class RateForm extends StatefulWidget {
   final Course course;
@@ -86,11 +86,12 @@ class _DetailInterfaceState extends State<DetailInterface> {
   @override
   void initState() {
     super.initState();
+    init();
+    rateCourse();
   }
 
   GlobalKey<FormState> _globalKey = new GlobalKey();
   bool _autoValidate = false;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +149,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Did the course content meet your expectations?"),
             RadioButtonGroup(
-              //validator: _validateName,
+                //validator: _validateName,
                 orientation: GroupedButtonsOrientation.HORIZONTAL,
                 labels: <String>[
                   "Bad",
@@ -156,8 +157,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (selected1) => setS1(selected1)              
-            ),
+                onSelected: (selected1) => setS1(selected1)),
             SizedBox(
               height: 5,
             ),
@@ -173,8 +173,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (selected2) => setS2(selected2) 
-            ),
+                onSelected: (selected2) => setS2(selected2)),
             SizedBox(
               height: 5,
             ),
@@ -190,8 +189,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (selected3) => setS3(selected3) 
-            ),
+                onSelected: (selected3) => setS3(selected3)),
             SizedBox(
               height: 5,
             ),
@@ -217,8 +215,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (selected4) => setS4(selected4) 
-            ),
+                onSelected: (selected4) => setS4(selected4)),
             SizedBox(
               height: 5,
             ),
@@ -234,8 +231,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (selected5) => setS5(selected5) 
-            ),
+                onSelected: (selected5) => setS5(selected5)),
             SizedBox(
               height: 5,
             ),
@@ -250,8 +246,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (selected6) => setS6(selected6) 
-            ),
+                onSelected: (selected6) => setS6(selected6)),
             SizedBox(
               height: 5,
             ),
@@ -277,8 +272,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   "Good",
                   "Excellent",
                 ],
-                onSelected: (selected7) => setS7(selected7) 
-            ),
+                onSelected: (selected7) => setS7(selected7)),
             SizedBox(
               height: 5,
             ),
@@ -307,31 +301,35 @@ class _DetailInterfaceState extends State<DetailInterface> {
   }
 
   void setS1(String s1) {
-    _selected1 = s1 ;
+    _selected1 = s1;
   }
 
   void setS2(String s2) {
-     _selected2 = s2 ;
+    _selected2 = s2;
   }
 
   void setS3(String s3) {
-    _selected3 = s3 ;
+    _selected3 = s3;
   }
 
   void setS4(String s4) {
-    _selected4 = s4 ;
+    _selected4 = s4;
   }
 
   void setS5(String s5) {
-    _selected5 = s5 ;
+    _selected5 = s5;
   }
 
   void setS6(String s6) {
-    _selected6 = s6 ;
+    _selected6 = s6;
   }
 
   void setS7(String s7) {
     _selected7 = s7;
+  }
+
+  Future init() async {
+    this.rateCourse();
   }
 
   Future<String> rateCourse() async {
@@ -353,17 +351,23 @@ class _DetailInterfaceState extends State<DetailInterface> {
       "coursename": widget.course.coursename,
     }).then((res) {
       if (res.body == "success") {
+        pr.dismiss();
         Toast.show("success", context,
-            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM); 
-        
-        pr.dismiss();  
-        setS1(null);setS2(null);setS3(null);setS4(null);
-        setS5(null);setS6(null);setS7(null); 
-        _showSuccessRate(); 
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+
+        pr.dismiss();
+        _showSuccessRate();
+        setS1(null);
+        setS2(null);
+        setS3(null);
+        setS4(null);
+        setS5(null);
+        setS6(null);
+        setS7(null);
       } else {
         Toast.show("Sorry, Please try again!", context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-        pr.dismiss(); 
+        pr.dismiss();
         _showDialog();
       }
     }).catchError((err) {
@@ -408,65 +412,66 @@ class _DetailInterfaceState extends State<DetailInterface> {
       //_showSnackBar("Please rate for for all questions.");
     } else {
       // Every of the data in the form are valid at this point
-      rateCourse();      
+      rateCourse();
     }
   }
 
   void _showDialog() {
-       showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text("Sorry!"),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Text("Course Rated! Please Rate for other Course."),
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(
-                  "OK",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                color: Colors.lightBlueAccent,
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Sorry!"),
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Text("Course Rated! Please Rate for other Course."),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(
+                "OK",
+                style: TextStyle(color: Colors.white),
               ),
-            ],
-          );
-        },
-      );
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              color: Colors.lightBlueAccent,
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showSuccessRate() {
-       showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text("Thank You"),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Text("Rated Success!"),
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(
-                  "OK",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  //Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => MainScreen(user: widget.user)));
-                },
-                color: Colors.lightBlueAccent,
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Thank You"),
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Text("Rated Success!"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(
+                "OK",
+                style: TextStyle(color: Colors.white),
               ),
-            ],
-          );
-        },
-      );
+              onPressed: () {
+                //Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            MainScreen(user: widget.user)));
+              },
+              color: Colors.lightBlueAccent,
+            ),
+          ],
+        );
+      },
+    );
   }
 }

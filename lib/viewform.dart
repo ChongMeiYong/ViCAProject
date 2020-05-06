@@ -142,7 +142,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Did the course content meet your expectations?"),
-            Text("Rate :  " + selected6, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
+            Text("Rate :  " + selected1, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
            
             SizedBox(
               height: 5,
@@ -215,8 +215,31 @@ class _DetailInterfaceState extends State<DetailInterface> {
             SizedBox(
               height: 5,
             ),
-          ])),
-      
+	    Container(
+              width: 350,
+              child: MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                height: 40,
+                child: Text(
+                  'OK',
+                  style: TextStyle(fontSize: 16),
+                ),
+                color: Colors.blueAccent,
+                textColor: Colors.white,
+                elevation: 5,
+                onPressed: () {
+                  //Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              MainScreen(user: widget.user)));
+                },
+              ),
+              //MapSample(),
+            ),
+          ])),      
         SizedBox(
               height: 15,
         ),
@@ -242,7 +265,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
         pr.dismiss();
       });
     }).catchError((err) {
-      print(err);
+      _showRate();
       pr.dismiss();
     });
     return null;
@@ -261,5 +284,37 @@ class _DetailInterfaceState extends State<DetailInterface> {
     selected6 = d5 ;
     selected7 = d6 ;
   }
+
+  void _showRate() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: new Text("Sorry"),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text("Course not rated yet, Please rate it!"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text(
+                  "OK",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  //Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              MainScreen(user: widget.user)));
+                },
+                color: Colors.lightBlueAccent,
+              ),
+            ],
+          );
+        },
+      );
+    }
  }
 
