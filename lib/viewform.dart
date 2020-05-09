@@ -85,6 +85,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
     refreshKey = GlobalKey<RefreshIndicatorState>();
     init();
     makeRequest();
+    _onFormDetail("null", "null", "null", "null", "null", "null", "null");
   }
   
   GlobalKey<FormState> _globalKey = new GlobalKey();
@@ -256,16 +257,21 @@ class _DetailInterfaceState extends State<DetailInterface> {
       "email": widget.user.email,
       "courseid": widget.course.courseid,
     }).then((res) {
+      if(res.body.contains("s")){
       setState(() {
         var extractdata = json.decode(res.body);
         data = extractdata["course"];
-        print(data[0]);
+        print(data);
         _onFormDetail(
-          data[0], data[1], data[2], data[3], data[4], data[5], data[6]);
+          data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
         pr.dismiss();
       });
+      }else{
+        _showRate();
+        pr.dismiss();
+      }
     }).catchError((err) {
-      _showRate();
+      print(err);
       pr.dismiss();
     });
     return null;
@@ -273,6 +279,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
 
   Future init() async {
     this.makeRequest();
+    this._onFormDetail("null", "null", "null", "null", "null", "null", "null");
   }
 
   void _onFormDetail(String d0, d1, d2, d3, d4, d5, d6) {

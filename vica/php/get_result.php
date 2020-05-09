@@ -10,6 +10,7 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $response["course"] = array();
     while ($row = $result ->fetch_assoc()){
+        array_push($response["course"], "s");
         array_push($response["course"], $row["selected1"]);
         array_push($response["course"], $row["selected2"]);
         array_push($response["course"], $row["selected3"]);
@@ -17,10 +18,10 @@ if ($result->num_rows > 0) {
         array_push($response["course"], $row["selected5"]);
         array_push($response["course"], $row["selected6"]);
         array_push($response["course"], $row["selected7"]);
-   }
+    }
     echo json_encode($response);
 }else{
-    echo "nodata";
+    echo "nodata,null,null,null,null,null,null,null";
 }
 ?>
 

@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vica2/mainscreenAdmin.dart';
-import 'package:vica2/rate.dart';
-import 'package:vica2/rateform.dart';
 import 'package:vica2/user.dart';
 import 'package:vica2/viewform.dart';
 import 'admin.dart';
@@ -18,9 +16,8 @@ double perpage = 1;
 class ViewCourse extends StatefulWidget {
   final Admin admin;
   final User user;
-  final Rate rate;
 
-  ViewCourse({Key key, this.admin, this.user, this.rate}) : super(key: key);
+  ViewCourse({Key key, this.admin, this.user}) : super(key: key);
 
   @override
   _ViewCourseState createState() => _ViewCourseState();
@@ -62,8 +59,7 @@ class _ViewCourseState extends State<ViewCourse> {
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return Container(
-                          child: Column(children: <Widget>[
-                            
+                          child: Column(children: <Widget>[                            
                               Column(children: <Widget>[
                                 SizedBox(
                                   height: 10,
@@ -181,36 +177,12 @@ class _ViewCourseState extends State<ViewCourse> {
   }
 
   Future init() async {
-    this.makeRequest(); this.makeRequest2();
+    this.makeRequest(); 
   }
 
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 2));
     this.makeRequest();
-    return null;
-  }
-
-  Future<String> makeRequest2() async {
-    String urlResult= "http://myondb.com/vicaProject/php/get_result.php";
-    ProgressDialog pr = new ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
-    pr.style(message: "Loading...");
-    pr.show();
-    http.post(urlResult, body: {
-      "email": widget.user.email,
-      "courseid": widget.rate.courseid,
-    }).then((res) {
-      setState(() {
-        var extractdata = json.decode(res.body);
-        data = extractdata["result"];
-        perpage = (data.length / 10);
-        print("data");
-        pr.dismiss();
-      });
-    }).catchError((err) {
-      print(err);
-      pr.dismiss();
-    });
     return null;
   }
 

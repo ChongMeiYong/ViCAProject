@@ -630,8 +630,10 @@ class _TabScreen3State extends State<TabScreen3> {
                 await prefs.setString('email', '');
                 await prefs.setString('pass', '');
                 print("LOGOUT");
-                Navigator.pop(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
+                Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => LoginPage()));
               },
             ),
             new FlatButton(

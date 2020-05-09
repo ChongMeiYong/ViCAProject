@@ -424,7 +424,7 @@ class _DetailInterfaceState extends State<DetailInterface> {
           title: new Text("Sorry!"),
           content: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: new Text("Course Rated! Please Rate for other Course."),
+            child: new Text("Please Try for other Course."),
           ),
           actions: <Widget>[
             new FlatButton(
@@ -433,7 +433,11 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              MainScreen(user: widget.user)));
               },
               color: Colors.lightBlueAccent,
             ),
