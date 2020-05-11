@@ -1,31 +1,37 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:vica2/viewcourse.dart';
+import 'admin.dart';
+import 'mainscreenAdmin.dart';
 import 'user.dart';
 import 'course.dart';
-import 'rate.dart';
-import 'mainscreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 
 double perpage = 1;
 String urlgetresult = "http://myondb.com/vicaProject/php/get_result.php";
 
-String selected1, selected2, selected3, selected4, selected5, selected6, selected7;
+String selected1,
+    selected2,
+    selected3,
+    selected4,
+    selected5,
+    selected6,
+    selected7;
 
-class ViewForm extends StatefulWidget {
+class ViewFormAdmin extends StatefulWidget {
   final Course course;
   final User user;
-  final Rate rate;
-  
-  ViewForm({this.course, this.user, this.rate});
+  final Admin admin;
+
+  ViewFormAdmin({this.course, this.user, this.admin});
 
   @override
-  _ViewFormState createState() => _ViewFormState();
-  
+  _ViewFormAdminState createState() => _ViewFormAdminState();
 }
 
-class _ViewFormState extends State<ViewForm> {
+class _ViewFormAdminState extends State<ViewFormAdmin> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -44,7 +50,7 @@ class _ViewFormState extends State<ViewForm> {
               child: DetailInterface(
                 course: widget.course,
                 user: widget.user,
-                //rate: widget.rate,
+                admin: widget.admin,
               ),
             ),
           )),
@@ -55,8 +61,8 @@ class _ViewFormState extends State<ViewForm> {
     Navigator.pop(
         context,
         MaterialPageRoute(
-          builder: (context) => MainScreen(
-            user: widget.user,
+          builder: (context) => MainScreenAdmin(
+            admin: widget.admin,
           ),
         ));
     return Future.value(false);
@@ -66,9 +72,9 @@ class _ViewFormState extends State<ViewForm> {
 class DetailInterface extends StatefulWidget {
   final Course course;
   final User user;
-  final Rate rate;
+  final Admin admin;
 
-  DetailInterface({this.course, this.user, this.rate});
+  DetailInterface({this.course, this.user, this.admin});
 
   @override
   _DetailInterfaceState createState() => _DetailInterfaceState();
@@ -86,38 +92,36 @@ class _DetailInterfaceState extends State<DetailInterface> {
     makeRequest();
     _onFormDetail("null", "null", "null", "null", "null", "null", "null");
   }
-  
+
   GlobalKey<FormState> _globalKey = new GlobalKey();
   bool _autoValidate = false;
-  
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Center(),        
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: 180,
-          height: 100,
-          child: Image.network(
-              'http://myondb.com/vicaProject/images/${widget.course.courseimage}.jpg',
-              fit: BoxFit.fill),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(widget.course.coursename.toUpperCase(),
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            )),
-        SizedBox(
-          height: 10,
-          
-        ),
-        Container(
+    return Column(children: <Widget>[
+      Center(),
+      SizedBox(
+        height: 10,
+      ),
+      Container(
+        width: 180,
+        height: 100,
+        child: Image.network(
+            'http://myondb.com/vicaProject/images/${widget.course.courseimage}.jpg',
+            fit: BoxFit.fill),
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Text(widget.course.coursename.toUpperCase(),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          )),
+      SizedBox(
+        height: 10,
+      ),
+      Container(
           alignment: Alignment.topLeft,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
@@ -125,11 +129,13 @@ class _DetailInterfaceState extends State<DetailInterface> {
             SizedBox(
               height: 5,
             ),
+            Text("User : " + widget.user.name,
+                style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Course ID : " + widget.course.courseid,
                 style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Course Name : " + widget.course.coursename,
                 style: TextStyle(fontWeight: FontWeight.bold)),
-      
+
             //Course Evaluation Question
             SizedBox(
               height: 10,
@@ -142,24 +148,32 @@ class _DetailInterfaceState extends State<DetailInterface> {
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("Did the course content meet your expectations?"),
-            Text("Rate :  " + selected1, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
-           
+            Text("Rate :  " + selected1,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.purple)),
+
             SizedBox(
               height: 5,
             ),
 
             Text("Question 2: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text("How did you experience the speed or rate at which the training was presented?"),
-            Text("Rate :  " + selected2, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
-         
+            Text(
+                "How did you experience the speed or rate at which the training was presented?"),
+            Text("Rate :  " + selected2,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.purple)),
+
             SizedBox(
               height: 5,
             ),
 
             Text("Question 3: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text("Can you practically apply the course material to your daily work situations?"),
-            Text("Rate :  " + selected3, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
-           
+            Text(
+                "Can you practically apply the course material to your daily work situations?"),
+            Text("Rate :  " + selected3,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.purple)),
+
             SizedBox(
               height: 5,
             ),
@@ -175,25 +189,33 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   color: Colors.blue,
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text("How knowledgeable was the facilitator on the subject matter?"),
-            Text("Rate :  " + selected4, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
-       
+            Text(
+                "How knowledgeable was the facilitator on the subject matter?"),
+            Text("Rate :  " + selected4,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.purple)),
+
             SizedBox(
               height: 5,
             ),
 
             Text("Question 2: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text("Did the facilitator explain the concepts clearly and in an understandable way?"),
-            Text("Rate :  " + selected5, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
-            
+            Text(
+                "Did the facilitator explain the concepts clearly and in an understandable way?"),
+            Text("Rate :  " + selected5,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.purple)),
+
             SizedBox(
               height: 5,
             ),
 
             Text("Question 3: ", style: TextStyle(fontWeight: FontWeight.bold)),
             Text("How did the facilitator handle questions that were asked?"),
-            Text("Rate :  " + selected6, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
-            
+            Text("Rate :  " + selected6,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.purple)),
+
             SizedBox(
               height: 5,
             ),
@@ -209,13 +231,16 @@ class _DetailInterfaceState extends State<DetailInterface> {
                   color: Colors.blue,
                 )),
             Text("Question 1: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            Text("Was the venue sufficient for the type of training presented?"),
-            Text("Rate :  " + selected7, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple)),
-            
+            Text(
+                "Was the venue sufficient for the type of training presented?"),
+            Text("Rate :  " + selected7,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.purple)),
+
             SizedBox(
               height: 5,
             ),
-	    Container(
+            Container(
               width: 350,
               child: MaterialButton(
                 shape: RoundedRectangleBorder(
@@ -234,19 +259,19 @@ class _DetailInterfaceState extends State<DetailInterface> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              MainScreen(user: widget.user)));
+                              ViewCourse(user: widget.user)));
                 },
               ),
               //MapSample(),
             ),
-          ])),      
-        SizedBox(
-              height: 15,
-        ),
-      ]);
-    }
+          ])),
+      SizedBox(
+        height: 15,
+      ),
+    ]);
+  }
 
-    Future<String> makeRequest() async {
+  Future<String> makeRequest() async {
     String urlResult = "http://myondb.com/vicaProject/php/get_result.php";
     ProgressDialog pr = new ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
@@ -256,16 +281,16 @@ class _DetailInterfaceState extends State<DetailInterface> {
       "email": widget.user.email,
       "courseid": widget.course.courseid,
     }).then((res) {
-      if(res.body.contains("s")){
-      setState(() {
-        var extractdata = json.decode(res.body);
-        data = extractdata["course"];
-        print(data);
-        _onFormDetail(
-          data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
-        pr.dismiss();
-      });
-      }else{
+      if (res.body.contains("s")) {
+        setState(() {
+          var extractdata = json.decode(res.body);
+          data = extractdata["course"];
+          print(data);
+          _onFormDetail(
+              data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
+          pr.dismiss();
+        });
+      } else {
         _showRate();
         pr.dismiss();
       }
@@ -282,45 +307,46 @@ class _DetailInterfaceState extends State<DetailInterface> {
   }
 
   void _onFormDetail(String d0, d1, d2, d3, d4, d5, d6) {
-    selected1 = d0 ;
-    selected2 = d1 ;
-    selected3 = d2 ;
-    selected4 = d3 ;
-    selected5 = d4 ;
-    selected6 = d5 ;
-    selected7 = d6 ;
+    selected1 = d0;
+    selected2 = d1;
+    selected3 = d2;
+    selected4 = d3;
+    selected5 = d4;
+    selected6 = d5;
+    selected7 = d6;
   }
 
   void _showRate() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text("Sorry"),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Text("Course not rated yet, Please rate it!"),
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text(
-                  "OK",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  //Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              MainScreen(user: widget.user)));
-                },
-                color: Colors.lightBlueAccent,
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Sorry"),
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Text("User not rate for this course yet!"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(
+                "OK",
+                style: TextStyle(color: Colors.white),
               ),
-            ],
-          );
-        },
-      );
-    }
- }
-
+              onPressed: () {
+                //Navigator.of(context).pop();
+                Navigator.pop(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewCourse(
+                        user: widget.user,
+                      ),
+                    ));
+              },
+              color: Colors.lightBlueAccent,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

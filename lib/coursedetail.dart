@@ -12,8 +12,7 @@ class CourseDetail extends StatefulWidget {
   final User user;
   final Admin admin;
 
-  const CourseDetail({Key key, this.course, this.user, this.admin})
-      : super(key: key);
+  CourseDetail({this.course, this.user, this.admin});
 
   @override
   _CourseDetailState createState() => _CourseDetailState();
@@ -49,7 +48,7 @@ class _CourseDetailState extends State<CourseDetail> {
         context,
         MaterialPageRoute(
           builder: (context) => ViewCourse(
-            admin: widget.admin,
+            user: widget.user,
           ),
         ));
     return Future.value(false);

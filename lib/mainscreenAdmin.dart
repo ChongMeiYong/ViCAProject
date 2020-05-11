@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreenAdmin> {
   void initState() {
     super.initState();
     tabs = [
-      TabScreenAdmin(user: widget.user),
+      TabScreenAdmin(admin: widget.admin),
       TabScreenAdmin2(admin: widget.admin),
     ];
   }

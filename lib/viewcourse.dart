@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:vica2/mainscreenAdmin.dart';
 import 'package:vica2/user.dart';
 import 'package:vica2/viewform.dart';
+import 'package:vica2/viewformAdmin.dart';
 import 'admin.dart';
 import 'course.dart';
 import 'package:http/http.dart' as http;
@@ -231,7 +232,7 @@ class _ViewCourseState extends State<ViewCourse> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ViewForm(course: course, user: widget.user)));
+                              ViewFormAdmin(course: course, user: widget.user)));
                 },
               ),
             ],

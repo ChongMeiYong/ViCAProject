@@ -113,7 +113,6 @@ class _TabScreenAdminState extends State<TabScreenAdmin> {
                               data[index]['phone'],
                               data[index]['dob'],
                               data[index]['address'],
-                              
                             ),
                           child: Padding(
                         padding: const EdgeInsets.all(5.0),
